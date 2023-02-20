@@ -1,2 +1,2 @@
 # chess-express
-Creating chess for my coursework at Nottingham Trent University, using C++ and 
+Creating chess for my coursework at Nottingham Trent University, using C++ and SDL
