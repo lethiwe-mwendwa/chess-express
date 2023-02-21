@@ -1,1 +1,2 @@
-﻿LINK : fatal error LNK1104: cannot open file 'SDL2.main.lib'
+﻿  main.cpp
+  ChessApp.vcxproj -> E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\x64\Debug\ChessApp.exe
