@@ -1,4 +1,6 @@
 #include "SDL.h"
+#include <iostream>
+#include <algorithm>
 using namespace std;
 
 const int boardSize = 8;
@@ -7,7 +9,7 @@ int SCREEN_HEIGHT = 560;
 
 
 
-void drawBoard(SDL_Renderer* renderer, int boardSize, double width, double height) {
+void drawBoard(SDL_Renderer* renderer, float width, float height) {
 	int tileWidthInc;
 	int tileSize;
 	int tileHeightInc;
@@ -15,17 +17,19 @@ void drawBoard(SDL_Renderer* renderer, int boardSize, double width, double heigh
 
 	// This part checks the width and height of the screen
 	if (height < width) {
-		tileSize = (height) / 8;
-		tileHeightInc = 0;
-		widthCord = (width - height) / 2;
+		tileSize = round(height) / boardSize;
+		tileHeightInc = 0 - round(tileSize * 8 - height) / 2;
+		widthCord = round((width - height)) / 2;
+		//if (tileSize * 8 < min(width, height) {}
+
 	}
 	else {
-		tileSize = (width) / 8; 
-		tileHeightInc = 0 - (width - height) / 2;
-		widthCord = 0;
+		tileSize = round(width) / boardSize;
+		tileHeightInc = 0 - round(width - height) / 2;
+		widthCord = round(width - tileSize * 8) / 2;
 
 	}
-
+	
 	// SDL_SetRenderDrawColor(renderer, 5, 50, 70, 255);
 	SDL_SetRenderDrawColor(renderer, 5, 50, 70, 255);
 	SDL_RenderClear(renderer);
@@ -40,15 +44,21 @@ void drawBoard(SDL_Renderer* renderer, int boardSize, double width, double heigh
 			}
 			else {
 				SDL_SetRenderDrawColor(renderer, 30, 129, 176, 255);
-			}
-
-			SDL_Rect tile = { tile.x = tileWidthInc, tile.y = tileHeightInc, tile.h = tileSize, tile.w = tileSize };
+			}	
+			SDL_Rect tile = { 
+				tile.x = tileWidthInc, 
+				tile.y = tileHeightInc, 
+				tile.h = tileSize, 
+				tile.w = tileSize 
+			};
 			SDL_RenderFillRect(renderer, &tile);
+
 			tileWidthInc += tileSize;
 		}
 		tileHeightInc += tileSize;
 		
 	}
+	cout << endl << " Tile*8: " << tileSize*8 << " Width: " << width << " Height: " << height;
 
 	SDL_RenderPresent(renderer);
 };
@@ -74,6 +84,7 @@ int main(int argc, char* argv[])
 
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
 
+
 	SDL_Event event;
 
 	/*
@@ -91,7 +102,7 @@ int main(int argc, char* argv[])
 	};
 	*/
 
-	drawBoard(renderer, boardSize, SCREEN_WIDTH,SCREEN_HEIGHT);
+	drawBoard(renderer, SCREEN_WIDTH,SCREEN_HEIGHT);
 
 
 
@@ -112,11 +123,10 @@ int main(int argc, char* argv[])
 			
 			if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 
-				drawBoard(renderer, boardSize, event.window.data1, event.window.data2);
+				drawBoard(renderer, event.window.data1, event.window.data2);
 				 
 			}
 			
-			SDL_Delay(10);
 		}
 
 
