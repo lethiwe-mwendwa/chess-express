@@ -1,11 +1,9 @@
 #pragma once
 #include "SDL.h"
-
+#include "Constants.h"
 class Game
 {
 public:
-	Game();
-	~Game();
 
 
 private:

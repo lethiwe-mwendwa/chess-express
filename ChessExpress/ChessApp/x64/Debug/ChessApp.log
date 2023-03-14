@@ -1,12 +1,4 @@
 ﻿  main.cpp
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(64,28): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(65,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(66,39): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(71,27): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(72,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(73,43): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(191,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(191,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(241,57): warning C4244: 'argument': conversion from 'Sint32' to 'float', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(241,37): warning C4244: 'argument': conversion from 'Sint32' to 'float', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(101,64): warning C4244: 'argument': conversion from 'Sint32' to 'float', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(101,44): warning C4244: 'argument': conversion from 'Sint32' to 'float', possible loss of data
   ChessApp.vcxproj -> E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\x64\Debug\ChessApp.exe
