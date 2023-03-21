@@ -4,14 +4,15 @@
 class Piece
 {
 public:
-	Piece(int type);
-	static void drawPeice(SDL_Renderer* renderer, int column, int row, int pieceType);
+	Piece(SDL_Renderer* renderer, int type, int row, int column);
+	static void drawPeice(SDL_Renderer* renderer, int row, int column, int pieceType);
 
 private:
 	int pieceType;
 	const char* piecePath;
 	bool pieceAlive;
 	static const char* getPiecePath(int pieceType);
+	SDL_Rect* pieceRect;
 	
 };
 

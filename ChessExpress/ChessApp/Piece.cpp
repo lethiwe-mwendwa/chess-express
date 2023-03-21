@@ -5,10 +5,12 @@
 #include <iostream>
 using namespace std;
 
-Piece::Piece(int type) {
+Piece::Piece(SDL_Renderer* renderer,int type, int row, int column) {
 	pieceType = type;
 	piecePath = getPiecePath(pieceType);
 	pieceAlive = true;
+	pieceRect = &boardTiles[row][column];
+	drawPeice(renderer, row, column, pieceType);
 };
 
 const char* Piece::getPiecePath(int pieceType) {
@@ -43,7 +45,7 @@ const char* Piece::getPiecePath(int pieceType) {
 	return(pieceImagePaths[typeIndex][colourIndex]);
 };
 
-void Piece::drawPeice(SDL_Renderer* renderer, int column, int row, int pieceType) {
+void Piece::drawPeice(SDL_Renderer* renderer, int row, int column, int pieceType) {
 	SDL_Surface* imageSurface = NULL;
 
 	imageSurface = SDL_LoadBMP(getPiecePath(pieceType));
@@ -51,12 +53,10 @@ void Piece::drawPeice(SDL_Renderer* renderer, int column, int row, int pieceType
 	if (NULL == imageSurface) {
 		cout << "SDL error bozo" << SDL_GetError();
 	}
-	SDL_Rect imageRectLocation = boardTiles[column][row];
+	SDL_Rect imageRectLocation = boardTiles[row][column];
 
-	//SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
 	SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(renderer, imageSurface);
 	SDL_FreeSurface(imageSurface);
-	//SDL_SetTextureScaleMode(imageTexture, SDL_ScaleModeBest);
 
 	SDL_RenderCopy(renderer, imageTexture, NULL, &imageRectLocation);
 	SDL_DestroyTexture(imageTexture);

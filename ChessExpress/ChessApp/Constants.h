@@ -4,8 +4,8 @@
 
 
 // Declaring the features
-const int SCREEN_WIDTH = 264;
-const int SCREEN_HEIGHT = 359;
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;
 
 
 //We'll use this for bitwise calculation. These are the values of the pieces.
@@ -22,7 +22,26 @@ const int TYPE_MASK = 7;
 
 const int boardSize=8;
 
-extern const char* pieceImagePaths[][2];
+extern const char titleImagePath[];
+
+
 extern SDL_Rect boardTiles[boardSize][boardSize];
 
-extern Piece chessBoard[boardSize][boardSize];
+extern Piece* piecesOnBoard[boardSize][boardSize];
+
+
+//Fen stuff
+
+extern const char startingFen[];
+
+extern char piecePlacement[];
+extern char playerTurn;
+extern char castlingAbility[];
+extern char enPassantTarget[];
+extern char halfmoveClock[];
+extern char fullmoveClock[];
+
+
+extern char currentFen[];
+
+extern const char* pieceImagePaths[][2];
