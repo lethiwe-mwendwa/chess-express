@@ -1,5 +1,13 @@
 #include "Constants.h"
 
+int SCREEN_WIDTH = 1280;
+int SCREEN_HEIGHT = 720;
+
+int gameTileSize;
+bool isDragging = false;
+SDL_Rect mouseRect = {};
+Piece* clickedPiece = new Piece(NULL, NULL, NULL, NULL);
+
 const char* pieceImagePaths[][2] = {
 	{ "assets/P.bmp", "assets/bP.bmp" },
 	{ "assets/K.bmp", "assets/bK.bmp" },
@@ -12,7 +20,9 @@ const char* pieceImagePaths[][2] = {
 
 SDL_Rect boardTiles[boardSize][boardSize];
 
-Piece* piecesOnBoard[boardSize][boardSize] = {
+Piece* piecesOnBoard[boardSize][boardSize];
+
+/*= {
 {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
 {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
 {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
@@ -22,12 +32,13 @@ Piece* piecesOnBoard[boardSize][boardSize] = {
 {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
 {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL}
 };
-
+*/
 const char titleImagePath[] = "assets/ChessXpress.bmp";
+const char pressEnterImagePath[] = "assets/pressEnter.bmp";
 
 const char startingFen[] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-char currentFen[] = "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2";
+char currentFen[] = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
 
 char piecePlacement[64] = { 0 };
 char playerTurn = '-';

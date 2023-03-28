@@ -44,7 +44,7 @@ void Board::drawBoard(SDL_Renderer* renderer, float width, float height) {
 			else {
 				SDL_SetRenderDrawColor(renderer, 30, 129, 176, 255);
 			}
-			SDL_Rect tile;
+			SDL_Rect tile = {};
 			tile.x = tileWidthInc;
 			tile.y = tileHeightInc;
 			tile.h = tileSize;
@@ -60,7 +60,7 @@ void Board::drawBoard(SDL_Renderer* renderer, float width, float height) {
 	}
 	//cout << endl << " Tile*8: " << tileSize * 8 << " Width: " << width << " Height: " << height;
 
-
+	gameTileSize = tileSize;
 };
 
 void Board::fenSplitter(char fen[]) {
@@ -134,7 +134,25 @@ void Board::fenSplitter(char fen[]) {
 
 }
 
-void Board::fenDisplay(SDL_Renderer* renderer, char fen[])
+void Board::pieceDisplay(SDL_Renderer* renderer, Piece* selectedPiece)
+{
+	for (int i = 0; i < boardSize; i++) {
+		for (int j = 0; j < boardSize; j++) {
+			if (piecesOnBoard[i][j]) {
+				if(selectedPiece){
+					if (not(selectedPiece == piecesOnBoard[i][j])){
+						piecesOnBoard[i][j]->drawPeice(renderer, i, j);
+					}
+				}
+				else {
+					piecesOnBoard[i][j]->drawPeice(renderer, i, j);
+				}
+			}
+		}
+	}
+}
+
+void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 {
 
 	// For the first part of the 
@@ -157,87 +175,108 @@ void Board::fenDisplay(SDL_Renderer* renderer, char fen[])
 			case('r'):
 			{
 				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | ROOK);
-				Piece blackRook = { renderer, BLACK | ROOK, currentRow,currentColumn };
-				piecesOnBoard[currentRow][currentColumn] = &blackRook;
+				//Piece blackRook = { renderer, BLACK | ROOK , currentRow,currentColumn };
+				//piecesOnBoard[currentRow][currentColumn] = &blackRook;
+
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK | ROOK, currentRow, currentColumn);
+
+
+
 			}
 				break;
 
 			case('n'):
 			{
 				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | KNIGHT);
-				Piece blackKnight = { renderer, BLACK | KNIGHT, currentRow,currentColumn };
-				piecesOnBoard[currentRow][currentColumn] = &blackKnight;
+				//Piece blackKnight = { renderer, BLACK | KNIGHT, currentRow, currentColumn };
+				//piecesOnBoard[currentRow][currentColumn] = &blackKnight;
+
+				//cout << "piecesOnBoard one: " << piecesOnBoard[currentRow][currentColumn]->pieceType << endl;
+
+				//cout << "blackKnight one: " << blackKnight.pieceType << endl;
+
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK | KNIGHT, currentRow, currentColumn);
 			}
 				break;
 			case('b'):
 				
 			{	
 				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | BISHOP);
-				Piece blackBishop = { renderer, BLACK | BISHOP, currentRow,currentColumn }; 
-				piecesOnBoard[currentRow][currentColumn] = &blackBishop;
+				//Piece blackBishop = { renderer, BLACK + BISHOP, currentRow,currentColumn }; 
+				//piecesOnBoard[currentRow][currentColumn] = &blackBishop;
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK + BISHOP, currentRow, currentColumn);
 			}
 				break;
 			case('q'):
 			{
 				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | QUEEN);
-				Piece blackQueen = { renderer, BLACK | QUEEN, currentRow,currentColumn };
-				piecesOnBoard[currentRow][currentColumn] = &blackQueen;
+				//Piece blackQueen = { renderer, BLACK + QUEEN, currentRow,currentColumn };
+				//piecesOnBoard[currentRow][currentColumn] = &blackQueen;
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK + QUEEN, currentRow, currentColumn);
 			}
 				break;
 			case('k'): 
 			{
 				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | KING);
-				Piece blackKing = { renderer, BLACK | KING, currentRow,currentColumn };
-				piecesOnBoard[currentRow][currentColumn] = &blackKing;
+				//Piece blackKing = { renderer, BLACK + KING, currentRow,currentColumn };
+				//piecesOnBoard[currentRow][currentColumn] = &blackKing;
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK + KING, currentRow, currentColumn);
 			}
 				break;
 			case('p'):
 			{
 				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | PAWN);
-				Piece blackPawn = { renderer, BLACK | PAWN, currentRow,currentColumn };
-				piecesOnBoard[currentRow][currentColumn] = &blackPawn;
+				//Piece blackPawn = { renderer, BLACK + PAWN, currentRow,currentColumn };
+				//piecesOnBoard[currentRow][currentColumn] = &blackPawn;
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK + PAWN, currentRow, currentColumn);
 			}
 				break;
 			case('R'):
 			{
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | ROOK);
-				Piece whiteRook = { renderer, WHITE | ROOK, currentRow,currentColumn };
-				piecesOnBoard[currentRow][currentColumn] = &whiteRook;
+				//Piece whiteRook = { renderer, WHITE + ROOK, currentRow,currentColumn };
+				//piecesOnBoard[currentRow][currentColumn] = &whiteRook;
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + ROOK, currentRow, currentColumn);
 			}
 				break;
 			case('N'):
 			{
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | KNIGHT);
-				Piece whiteKnight = { renderer, WHITE | KNIGHT, currentRow,currentColumn };
-				piecesOnBoard[currentRow][currentColumn] = &whiteKnight;
+				//Piece whiteKnight = { renderer, WHITE + KNIGHT, currentRow,currentColumn };
+				//piecesOnBoard[currentRow][currentColumn] = &whiteKnight;
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + KNIGHT, currentRow, currentColumn);
 			}
 				break;
 			case('B'):
 			{
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | BISHOP);
-				Piece whiteBishop = { renderer, WHITE | BISHOP, currentRow,currentColumn };
-				piecesOnBoard[currentRow][currentColumn] = &whiteBishop;
+				//Piece whiteBishop = { renderer, WHITE + BISHOP, currentRow,currentColumn };
+				//piecesOnBoard[currentRow][currentColumn] = &whiteBishop;
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + BISHOP, currentRow, currentColumn);
 			}
 				break;
 			case('Q'):
 			{
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | QUEEN);
-				Piece whiteQueen = { renderer, WHITE | QUEEN, currentRow,currentColumn };
-				piecesOnBoard[currentRow][currentColumn] = &whiteQueen;
+				//Piece whiteQueen = { renderer, WHITE + QUEEN, currentRow,currentColumn };
+				//piecesOnBoard[currentRow][currentColumn] = &whiteQueen;
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + QUEEN, currentRow, currentColumn);
 			}
 				break;
 			case('K'):
 			{
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | KING);
-				Piece whiteKing = { renderer, WHITE | KING, currentRow,currentColumn };
-				piecesOnBoard[currentRow][currentColumn] = &whiteKing;
+				//Piece whiteKing = { renderer, WHITE + KING, currentRow,currentColumn };
+				//piecesOnBoard[currentRow][currentColumn] = &whiteKing;
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + KING, currentRow, currentColumn);
 			}
 				break;
 			case('P'):
 			{
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | PAWN);
-				Piece whitePawn = { renderer, WHITE | PAWN, currentRow,currentColumn };
-				piecesOnBoard[currentRow][currentColumn] = &whitePawn;
+				//Piece whitePawn = { renderer, WHITE + PAWN, currentRow,currentColumn };
+				//piecesOnBoard[currentRow][currentColumn] = &whitePawn;
+				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + PAWN, currentRow, currentColumn);
 			}
 				break;
 			}
@@ -249,3 +288,4 @@ void Board::fenDisplay(SDL_Renderer* renderer, char fen[])
 }
 
 
+//bool Board::castleAbility()

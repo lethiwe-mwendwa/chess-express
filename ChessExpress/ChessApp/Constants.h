@@ -4,9 +4,13 @@
 
 
 // Declaring the features
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 720;
+extern int SCREEN_WIDTH;
+extern int SCREEN_HEIGHT;
 
+extern  int gameTileSize;
+extern bool isDragging;
+extern SDL_Rect mouseRect;
+extern Piece* clickedPiece;
 
 //We'll use this for bitwise calculation. These are the values of the pieces.
 
@@ -23,6 +27,7 @@ const int TYPE_MASK = 7;
 const int boardSize=8;
 
 extern const char titleImagePath[];
+extern const char pressEnterImagePath[];
 
 
 extern SDL_Rect boardTiles[boardSize][boardSize];
