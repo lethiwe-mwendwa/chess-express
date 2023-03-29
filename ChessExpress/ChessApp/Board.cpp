@@ -61,6 +61,76 @@ void Board::drawBoard(SDL_Renderer* renderer, float width, float height) {
 	//cout << endl << " Tile*8: " << tileSize * 8 << " Width: " << width << " Height: " << height;
 
 	gameTileSize = tileSize;
+	SCREEN_WIDTH = width;
+	SCREEN_HEIGHT = height;
+};
+
+
+void Board::drawBoard2(SDL_Renderer* renderer, float width, float height, Piece* selectedPiece) {
+	int tileWidthInc;
+	int tileSize;
+	int tileHeightInc;
+	int widthCord;
+
+	// This part checks the width and height of the screen
+	if (height < width) {
+		tileSize = round(height) / boardSize;
+		tileHeightInc = 0 - round(tileSize * 8 - height) / 2;
+		widthCord = round((width - height)) / 2;
+		//if (tileSize * 8 < min(width, height) {}
+
+	}
+	else {
+		tileSize = round(width) / boardSize;
+		tileHeightInc = 0 - round(width - height) / 2;
+		widthCord = round(width - tileSize * 8) / 2;
+
+	}
+
+	// SDL_SetRenderDrawColor(renderer, 5, 50, 70, 255);
+	SDL_SetRenderDrawColor(renderer, 5, 50, 70, 255);
+	SDL_RenderClear(renderer);
+
+	for (int i = 0; i < boardSize; i++) {
+		tileWidthInc = widthCord;
+		for (int j = 0; j < boardSize; j++) {
+			//i is the row, j is the column
+			//draw square
+			if (((i + j) % 2) == 0) {
+				SDL_SetRenderDrawColor(renderer, 232, 226, 198, 255);
+			}
+			else {
+				SDL_SetRenderDrawColor(renderer, 30, 129, 176, 255);
+			}
+			SDL_Rect tile = {};
+			tile.x = tileWidthInc;
+			tile.y = tileHeightInc;
+			tile.h = tileSize;
+			tile.w = tileSize;
+
+			boardTiles[i][j] = tile;
+			SDL_RenderFillRect(renderer, &tile);
+
+			tileWidthInc += tileSize;
+			if (piecesOnBoard[i][j]) {
+				if (selectedPiece) {
+					if (not(selectedPiece == piecesOnBoard[i][j])) {
+						piecesOnBoard[i][j]->drawPeice(renderer, i,j);
+					}
+				}
+				else {
+					piecesOnBoard[i][j]->drawPeice(renderer, i,j);
+				}
+			}
+		}
+		tileHeightInc += tileSize;
+
+	}
+	//cout << endl << " Tile*8: " << tileSize * 8 << " Width: " << width << " Height: " << height;
+
+	gameTileSize = tileSize;
+	SCREEN_WIDTH = width;
+	SCREEN_HEIGHT = height;
 };
 
 void Board::fenSplitter(char fen[]) {
@@ -138,15 +208,9 @@ void Board::pieceDisplay(SDL_Renderer* renderer, Piece* selectedPiece)
 {
 	for (int i = 0; i < boardSize; i++) {
 		for (int j = 0; j < boardSize; j++) {
-			if (piecesOnBoard[i][j]) {
-				if(selectedPiece){
-					if (not(selectedPiece == piecesOnBoard[i][j])){
-						piecesOnBoard[i][j]->drawPeice(renderer, i, j);
-					}
-				}
-				else {
-					piecesOnBoard[i][j]->drawPeice(renderer, i, j);
-				}
+			if (piecesOnBoard[i][j] && (selectedPiece != piecesOnBoard[i][j])) {
+				piecesOnBoard[i][j]->drawPeice(renderer, i, j);
+				
 			}
 		}
 	}
@@ -286,6 +350,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 	}
 
 }
+
 
 
 //bool Board::castleAbility()

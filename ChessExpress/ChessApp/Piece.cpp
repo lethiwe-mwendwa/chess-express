@@ -5,13 +5,18 @@
 #include <iostream>
 using namespace std;
 
+
+
 Piece::Piece(SDL_Renderer* renderer,int type, int row, int column) {
 	this->pieceType = type;
 	this->piecePath = getPiecePath(type);
-	pieceAlive = true;
-	pieceRect = &boardTiles[row][column];
-
-	drawPeice(renderer, row, column);
+	this->pieceAlive = true;
+	this->pieceRow = row;
+	this->pieceColumn = column;
+	this->pieceRect = &boardTiles[row][column];
+	
+	
+	//drawPeice(renderer, row, column);
 	
 	
 };
@@ -87,5 +92,21 @@ void Piece::drawPeice2(SDL_Renderer* renderer, SDL_Rect imageRectLocation) {
 
 };
 
+void Piece::drawPeiceE(SDL_Renderer* renderer, SDL_Rect imageRectLocation) {
+	//pieceSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
+	SDL_Surface* pieceSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
+	if (NULL == pieceSurface) {
+		cout << "SDL error bozo" << SDL_GetError();
+	}
+
+	SDL_Texture* pieceTexture = SDL_CreateTextureFromSurface(renderer, pieceSurface);
+	SDL_FreeSurface(pieceSurface);
+	SDL_RenderCopy(renderer, pieceTexture, NULL, &imageRectLocation);
+	SDL_DestroyTexture(pieceTexture);
+
+
+
+
+};
 
 // seperate into models, view, controller
