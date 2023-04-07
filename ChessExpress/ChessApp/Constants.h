@@ -21,7 +21,8 @@ const int BISHOP = 4;
 const int ROOK = 5;
 const int KNIGHT = 6;
 const int BLACK = 8;
-const int WHITE = 0;
+//const int WHITE = 0;
+const int WHITE = 16;
 const int TYPE_MASK = 7;
 
 const int boardSize=8;

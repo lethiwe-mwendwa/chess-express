@@ -9,39 +9,8 @@
 
 using namespace std;
 
-//Work in progress functions/ideas NB: move away later
-/*
-* 
-* // chess board coords and find chess board points using coords
-const string ChessBoardCords[boardSize][boardSize] = {
-{"8a","8b","8c","8d","8e","8f","8g","8h"},
-{"7a","7b","7c","7d","7e","7f","7g","7h"},
-{"6a","6b","6c","6d","6e","6f","6g","6h"},
-{"5a","5b","5c","5d","5e","5f","5g","5h"},
-{"4a","4b","4c","4d","4e","4f","4g","4h"},
-{"3a","3b","3c","3d","3e","3f","3g","3h"},
-{"2a","2b","2c","2d","2e","2f","2g","2h"},
-{"1a","1b","1c","1d","1e","1f","1g","1h"}
-
-};
-
-
-
-int findSquareCoords(string coord){
-	for (int i = 0 ; i < boardSize; i++){
-		for (int j = 0; j < boardSize; j++) {
-			if (coord == ChessBoardCords[i][j]) {
-				return (i,j);
-				break;
-			}
-		}
-	}
-}
-*/
-
 
 //Temp Function
-void placePiece(SDL_Renderer* renderer, Piece* clickedPiece, SDL_Rect newLocation);
 void titleSequence(SDL_Renderer* renderer, int sWidth, int sHeight);
 
 bool titleScreen = true;
@@ -105,24 +74,6 @@ int main(int argc, char* argv[])
 	cout << halfmoveClock << endl;
 	cout << fullmoveClock << endl;
 
-
-	//for (int i = 0; i < boardSize; i++) {
-		//for (int j = 0; j < boardSize; j++) {
-
-			//if (piecesOnBoard[i][j]) {
-			//	cout << piecesOnBoard[i][j]->pieceType;
-			//	cout << " ";
-			//}
-			//else {
-			//	cout << "     ";
-			//}
-		//}
-		//cout << endl;
-	//}
-
-
-
-
 	// The game loop
 
 	while (gameRunning) {
@@ -160,6 +111,8 @@ int main(int argc, char* argv[])
 					//SDL_RenderPresent(renderer);
 					//}
 
+					
+
 					if (not(isDragging) && findClickedPiece(event.button.x, event.button.y)) {
 						clickedPiece = findClickedPiece(event.button.x, event.button.y);
 
@@ -167,14 +120,17 @@ int main(int argc, char* argv[])
 						//findClickedPiece(event.button.x, event.button.y)->drawPeice(renderer, 3, 3);
 						//SDL_RenderPresent(renderer);
 
-
+						//FIX THIS PART GOOFBALL
+						if (not(((playerTurn == 'w' and findClickedPiece(event.button.x, event.button.y)->pieceType & WHITE)) or (playerTurn == 'b' and (findClickedPiece(event.button.x, event.button.y)->pieceType & BLACK)))) {
+							break;
+						}
 						mouseRect.x = event.button.x;
 						mouseRect.y = event.button.y;
 						mouseRect.h = gameTileSize;
 						mouseRect.w = gameTileSize;
 
-
 						isDragging = true;
+						
 					}
 					break;
 				}
@@ -185,13 +141,62 @@ int main(int argc, char* argv[])
 						isDragging = false;
 						SDL_RenderClear(renderer);
 						Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-						
-						
-						if (findClickedRect(event.button.x, event.button.y) && not(findClickedPiece(event.button.x, event.button.y))) {
-							placePiece(renderer, clickedPiece, *(findClickedRect(event.button.x, event.button.y)));
+
+						if (findClickedRect(event.button.x, event.button.y)) {
+							bool freeSpace = not(findClickedPiece(event.button.x, event.button.y));
+
+
+							//player turn check
+
+							//if playerturn == 'w'
+
+							
+							if (freeSpace) {
+								clickedPiece->placePiece(renderer, event.button.x, event.button.y);
+								if (playerTurn == 'w') {
+									playerTurn = 'b';
+								}
+								else if (playerTurn == 'b') {
+									playerTurn = 'w';
+								}
+							}
+							else {
+								Piece* pieceInTheWay = findClickedPiece(event.button.x, event.button.y);
+
+								if (playerTurn == 'w') {
+									if (pieceInTheWay->pieceType & BLACK) {
+										//kill piece
+										pieceInTheWay->killPeice();
+										clickedPiece->placePiece(renderer, event.button.x, event.button.y);
+										playerTurn = 'b';
+										
+									}
+								}
+								else if (playerTurn == 'b') {
+									// DUDE fix the whole, is 0 thing, lmao
+									
+									if ((pieceInTheWay->pieceType & WHITE)){
+										//kill piece
+										pieceInTheWay->killPeice();
+										clickedPiece->placePiece(renderer, event.button.x, event.button.y);
+										playerTurn = 'w';
+										
+										
+									}
+								}
+
+							}
 						}
+						
 						Board::pieceDisplay(renderer);
 						SDL_RenderPresent(renderer);
+						cout << piecePlacement << endl;
+						cout << playerTurn << endl;
+						cout << castlingAbility << endl;
+						cout << enPassantTarget << endl;
+						cout << halfmoveClock << endl;
+						cout << fullmoveClock << endl;
+						
 						
 					}
 
@@ -210,7 +215,7 @@ int main(int argc, char* argv[])
 
 					Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 					//laggy
-					//Board::pieceDisplay(renderer, clickedPiece);
+					Board::pieceDisplay(renderer, clickedPiece);
 					clickedPiece->drawPeice2(renderer, mouseRect);
 					SDL_RenderPresent(renderer);
 
@@ -229,6 +234,7 @@ int main(int argc, char* argv[])
 		}
 		
 	}
+
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
@@ -309,16 +315,6 @@ void titleSequence(SDL_Renderer* renderer, int sWidth, int sHeight ){
 	SCREEN_WIDTH = sWidth;
 	SCREEN_HEIGHT = sHeight;
 }
-
-void placePiece(SDL_Renderer* renderer, Piece* clickedPiece, SDL_Rect newLocation) {
-	
-	int oldRow = clickedPiece->pieceRow;
-	int oldColumn = clickedPiece->pieceColumn;
-	clickedPiece->pieceColumn;
-
-	piecesOnBoard[oldRow][oldColumn] = NULL;
-	clickedPiece->drawPeice2(renderer, newLocation);
-};
 
 /*
 string notationWriter(){

@@ -17,6 +17,8 @@ const char* pieceImagePaths[][2] = {
 	{ "assets/N.bmp", "assets/bN.bmp" }
 };
 
+SDL_Texture* pieceRenderCache[][2];
+
 
 SDL_Rect boardTiles[boardSize][boardSize];
 
@@ -38,7 +40,7 @@ const char pressEnterImagePath[] = "assets/pressEnter.bmp";
 
 const char startingFen[] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-char currentFen[] = "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2";
+char currentFen[] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 char piecePlacement[64] = { 0 };
 char playerTurn = '-';

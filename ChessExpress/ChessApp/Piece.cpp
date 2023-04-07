@@ -3,6 +3,7 @@
 #include "Piece.h"
 #include "Constants.h"
 #include <iostream>
+#include "Inputs.h"
 using namespace std;
 
 
@@ -14,6 +15,16 @@ Piece::Piece(SDL_Renderer* renderer,int type, int row, int column) {
 	this->pieceRow = row;
 	this->pieceColumn = column;
 	this->pieceRect = &boardTiles[row][column];
+	this->pieceSurface = NULL;
+
+	pieceSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
+
+	if (NULL == pieceSurface) {
+		cout << "SDL error bozo" << SDL_GetError();
+	}
+
+	this->pieceTexture = SDL_CreateTextureFromSurface(renderer, pieceSurface);
+	SDL_FreeSurface(pieceSurface);
 	
 	
 	//drawPeice(renderer, row, column);
@@ -53,59 +64,66 @@ const char* Piece::getPiecePath(int pieceType) {
 	return(pieceImagePaths[typeIndex][colourIndex]);
 };
 
+void Piece::killPeice()
+{
+	this->pieceAlive = false;
+	piecesOnBoard[this->pieceRow][this->pieceColumn] = NULL;
+	delete this;
+}
+
 void Piece::drawPeice(SDL_Renderer* renderer, int row, int column) {
-	SDL_Surface* imageSurface = NULL;
+	//SDL_Surface* imageSurface = NULL;
 
 	//imageSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
-	imageSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
+	//imageSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
 
-	if (NULL == imageSurface) {
-		cout << "SDL error bozo" << SDL_GetError();
-	}
-	SDL_Rect imageRectLocation = boardTiles[row][column];
+	//if (NULL == imageSurface) {
+	//	cout << "SDL error bozo" << SDL_GetError();
+	//}
+	//SDL_Rect imageRectLocation = boardTiles[row][column];
 
-	SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(renderer, imageSurface);
-	SDL_FreeSurface(imageSurface);
+	//SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(renderer, imageSurface);
+	//SDL_FreeSurface(imageSurface);
 
-	SDL_RenderCopy(renderer, imageTexture, NULL, &imageRectLocation);
-	SDL_DestroyTexture(imageTexture);
+	//SDL_RenderCopy(renderer, this->pieceTexture, NULL, &imageRectLocation);
+	//SDL_DestroyTexture(imageTexture);
 
 
 };
 
 void Piece::drawPeice2(SDL_Renderer* renderer, SDL_Rect imageRectLocation) {
-	SDL_Surface* imageSurface = NULL;
 
-	//imageSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
-	imageSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
 
-	if (NULL == imageSurface) {
-		cout << "SDL error bozo" << SDL_GetError();
-	}
-
-	SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(renderer, imageSurface);
-	SDL_FreeSurface(imageSurface);
-
-	SDL_RenderCopy(renderer, imageTexture, NULL, &imageRectLocation);
-	SDL_DestroyTexture(imageTexture);
+	SDL_RenderCopy(renderer, this->pieceTexture, NULL, &imageRectLocation);
+	//SDL_DestroyTexture(imageTexture);
 
 
 };
 
-void Piece::drawPeiceE(SDL_Renderer* renderer, SDL_Rect imageRectLocation) {
-	//pieceSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
-	SDL_Surface* pieceSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
-	if (NULL == pieceSurface) {
-		cout << "SDL error bozo" << SDL_GetError();
-	}
+void Piece::placePiece(SDL_Renderer* renderer, int x, int y) {
 
-	SDL_Texture* pieceTexture = SDL_CreateTextureFromSurface(renderer, pieceSurface);
-	SDL_FreeSurface(pieceSurface);
-	SDL_RenderCopy(renderer, pieceTexture, NULL, &imageRectLocation);
-	SDL_DestroyTexture(pieceTexture);
+	clickedPiece = this;
+
+	SDL_Rect newLocation = *(findClickedRect(x, y));
+
+	int oldRow = clickedPiece->pieceRow;
+	int oldColumn = clickedPiece->pieceColumn;
+
+	int newRow;
+	int newColumn;
+	findClickedCords(x, y, newRow, newColumn);
+
+	clickedPiece->pieceRow = newRow;
+	clickedPiece->pieceColumn = newColumn;
 
 
+	// black piece tried killing itself?
+	//if (not((oldRow,oldColumn) == (newRow,newColumn))) {
+	piecesOnBoard[newRow][newColumn] = clickedPiece;
+	piecesOnBoard[oldRow][oldColumn] = NULL;
 
+
+	clickedPiece->drawPeice2(renderer, newLocation);
 
 };
 

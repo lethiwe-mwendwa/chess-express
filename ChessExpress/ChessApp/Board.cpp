@@ -8,6 +8,7 @@ Board::Board()
 {
 }
 
+
 void Board::drawBoard(SDL_Renderer* renderer, float width, float height) {
 	int tileWidthInc;
 	int tileSize;
@@ -65,7 +66,7 @@ void Board::drawBoard(SDL_Renderer* renderer, float width, float height) {
 	SCREEN_HEIGHT = height;
 };
 
-
+/*
 void Board::drawBoard2(SDL_Renderer* renderer, float width, float height, Piece* selectedPiece) {
 	int tileWidthInc;
 	int tileSize;
@@ -115,11 +116,11 @@ void Board::drawBoard2(SDL_Renderer* renderer, float width, float height, Piece*
 			if (piecesOnBoard[i][j]) {
 				if (selectedPiece) {
 					if (not(selectedPiece == piecesOnBoard[i][j])) {
-						piecesOnBoard[i][j]->drawPeice(renderer, i,j);
+						piecesOnBoard[i][j]->drawPeice2(renderer, i,j);
 					}
 				}
 				else {
-					piecesOnBoard[i][j]->drawPeice(renderer, i,j);
+					piecesOnBoard[i][j]->drawPeice2(renderer, i,j);
 				}
 			}
 		}
@@ -132,6 +133,7 @@ void Board::drawBoard2(SDL_Renderer* renderer, float width, float height, Piece*
 	SCREEN_WIDTH = width;
 	SCREEN_HEIGHT = height;
 };
+*/
 
 void Board::fenSplitter(char fen[]) {
 	// fix with meaningful names later
@@ -209,7 +211,7 @@ void Board::pieceDisplay(SDL_Renderer* renderer, Piece* selectedPiece)
 	for (int i = 0; i < boardSize; i++) {
 		for (int j = 0; j < boardSize; j++) {
 			if (piecesOnBoard[i][j] && (selectedPiece != piecesOnBoard[i][j])) {
-				piecesOnBoard[i][j]->drawPeice(renderer, i, j);
+				piecesOnBoard[i][j]->drawPeice2(renderer, boardTiles[i][j]);
 				
 			}
 		}
