@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "Inputs.h"
 #include <cstring>
+#include "King.h"
 
 using namespace std;
 
@@ -150,6 +151,7 @@ int main(int argc, char* argv[])
 
 							//if playerturn == 'w'
 
+
 							
 							if (freeSpace) {
 								clickedPiece->placePiece(renderer, event.button.x, event.button.y);
@@ -216,7 +218,7 @@ int main(int argc, char* argv[])
 					Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 					//laggy
 					Board::pieceDisplay(renderer, clickedPiece);
-					clickedPiece->drawPeice2(renderer, mouseRect);
+					clickedPiece->drawPeice(renderer, mouseRect);
 					SDL_RenderPresent(renderer);
 
 

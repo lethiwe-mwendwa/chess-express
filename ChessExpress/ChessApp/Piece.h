@@ -17,9 +17,11 @@ public:
 
 	void killPeice();
 	
-	void drawPeice(SDL_Renderer* renderer, int row, int column);
-	void drawPeice2(SDL_Renderer* renderer, SDL_Rect imageRectLocation);
+	//void drawPeice(SDL_Renderer* renderer, int row, int column);
+	void drawPeice(SDL_Renderer* renderer, SDL_Rect imageRectLocation);
 	
+	void getPieceTrans(int newColumn, int newRow, int& transColumn, int& transRow);
+
 	void placePiece(SDL_Renderer* renderer, int x, int y);
 
 	static const char* getPiecePath(int pieceType);

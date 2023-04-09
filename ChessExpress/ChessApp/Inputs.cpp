@@ -26,6 +26,7 @@ Piece *findClickedPiece(int x, int y) {
 	}
 	return NULL;
 }
+
 bool findClickedCords(int x, int y, int& row, int& column)
 {
 	SDL_Point inputPoint = { x, y };
@@ -41,4 +42,3 @@ bool findClickedCords(int x, int y, int& row, int& column)
 	}
 	return false;
 }
-;

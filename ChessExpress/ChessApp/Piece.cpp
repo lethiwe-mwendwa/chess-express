@@ -6,8 +6,6 @@
 #include "Inputs.h"
 using namespace std;
 
-
-
 Piece::Piece(SDL_Renderer* renderer,int type, int row, int column) {
 	this->pieceType = type;
 	this->piecePath = getPiecePath(type);
@@ -68,9 +66,11 @@ void Piece::killPeice()
 {
 	this->pieceAlive = false;
 	piecesOnBoard[this->pieceRow][this->pieceColumn] = NULL;
+	SDL_DestroyTexture(this->pieceTexture);
 	delete this;
 }
 
+/*
 void Piece::drawPeice(SDL_Renderer* renderer, int row, int column) {
 	//SDL_Surface* imageSurface = NULL;
 
@@ -90,15 +90,18 @@ void Piece::drawPeice(SDL_Renderer* renderer, int row, int column) {
 
 
 };
+*/
 
-void Piece::drawPeice2(SDL_Renderer* renderer, SDL_Rect imageRectLocation) {
-
+void Piece::drawPeice(SDL_Renderer* renderer, SDL_Rect imageRectLocation) {
 
 	SDL_RenderCopy(renderer, this->pieceTexture, NULL, &imageRectLocation);
-	//SDL_DestroyTexture(imageTexture);
-
 
 };
+
+void Piece::getPieceTrans(int newColumn, int newRow, int &transColumn, int &transRow) {
+	transColumn = this->pieceColumn + newColumn;
+	transRow = this->pieceRow + newRow;
+}
 
 void Piece::placePiece(SDL_Renderer* renderer, int x, int y) {
 
@@ -123,8 +126,6 @@ void Piece::placePiece(SDL_Renderer* renderer, int x, int y) {
 	piecesOnBoard[oldRow][oldColumn] = NULL;
 
 
-	clickedPiece->drawPeice2(renderer, newLocation);
+	clickedPiece->drawPeice(renderer, newLocation);
 
 };
-
-// seperate into models, view, controller

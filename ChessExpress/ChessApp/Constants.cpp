@@ -17,24 +17,13 @@ const char* pieceImagePaths[][2] = {
 	{ "assets/N.bmp", "assets/bN.bmp" }
 };
 
-SDL_Texture* pieceRenderCache[][2];
+//SDL_Texture* pieceRenderCache[][2];
 
 
 SDL_Rect boardTiles[boardSize][boardSize];
 
 Piece* piecesOnBoard[boardSize][boardSize];
 
-/*= {
-{NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-{NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-{NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-{NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-{NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-{NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-{NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-{NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL}
-};
-*/
 const char titleImagePath[] = "assets/ChessXpress.bmp";
 const char pressEnterImagePath[] = "assets/pressEnter.bmp";
 

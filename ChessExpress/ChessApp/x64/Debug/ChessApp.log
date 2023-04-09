@@ -1,4 +1,5 @@
-﻿  Board.cpp
+﻿  Bishop.cpp
+  Board.cpp
 E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Board.cpp(20,28): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Board.cpp(21,21): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Board.cpp(22,39): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
@@ -7,4 +8,10 @@ E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Board.cpp(
 E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Board.cpp(29,43): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Board.cpp(65,17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
 E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Board.cpp(66,18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  King.cpp
+  Knight.cpp
+  Pawn.cpp
+  Queen.cpp
+  Rook.cpp
+  Generating Code...
   ChessApp.vcxproj -> E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\x64\Debug\ChessApp.exe
