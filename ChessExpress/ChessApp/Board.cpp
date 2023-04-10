@@ -174,7 +174,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece blackRook = { renderer, BLACK | ROOK , currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &blackRook;
 
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK | ROOK, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new Rook(renderer, BLACK | ROOK, currentRow, currentColumn);
 
 
 
@@ -191,7 +191,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 
 				//cout << "blackKnight one: " << blackKnight.pieceType << endl;
 
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK | KNIGHT, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new Knight(renderer, BLACK | KNIGHT, currentRow, currentColumn);
 			}
 				break;
 			case('b'):
@@ -200,7 +200,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | BISHOP);
 				//Piece blackBishop = { renderer, BLACK + BISHOP, currentRow,currentColumn }; 
 				//piecesOnBoard[currentRow][currentColumn] = &blackBishop;
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK + BISHOP, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new Bishop(renderer, BLACK + BISHOP, currentRow, currentColumn);
 			}
 				break;
 			case('q'):
@@ -208,7 +208,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | QUEEN);
 				//Piece blackQueen = { renderer, BLACK + QUEEN, currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &blackQueen;
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK + QUEEN, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new Queen(renderer, BLACK + QUEEN, currentRow, currentColumn);
 			}
 				break;
 			case('k'): 
@@ -216,7 +216,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | KING);
 				//Piece blackKing = { renderer, BLACK + KING, currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &blackKing;
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK + KING, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new King(renderer, BLACK + KING, currentRow, currentColumn);
 			}
 				break;
 			case('p'):
@@ -224,7 +224,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | PAWN);
 				//Piece blackPawn = { renderer, BLACK + PAWN, currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &blackPawn;
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, BLACK + PAWN, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new Pawn(renderer, BLACK + PAWN, currentRow, currentColumn);
 			}
 				break;
 			case('R'):
@@ -232,7 +232,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | ROOK);
 				//Piece whiteRook = { renderer, WHITE + ROOK, currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &whiteRook;
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + ROOK, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new Rook(renderer, WHITE + ROOK, currentRow, currentColumn);
 			}
 				break;
 			case('N'):
@@ -240,7 +240,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | KNIGHT);
 				//Piece whiteKnight = { renderer, WHITE + KNIGHT, currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &whiteKnight;
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + KNIGHT, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new Knight(renderer, WHITE + KNIGHT, currentRow, currentColumn);
 			}
 				break;
 			case('B'):
@@ -248,7 +248,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | BISHOP);
 				//Piece whiteBishop = { renderer, WHITE + BISHOP, currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &whiteBishop;
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + BISHOP, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new Bishop(renderer, WHITE + BISHOP, currentRow, currentColumn);
 			}
 				break;
 			case('Q'):
@@ -256,7 +256,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | QUEEN);
 				//Piece whiteQueen = { renderer, WHITE + QUEEN, currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &whiteQueen;
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + QUEEN, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new Queen(renderer, WHITE + QUEEN, currentRow, currentColumn);
 			}
 				break;
 			case('K'):
@@ -264,7 +264,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | KING);
 				//Piece whiteKing = { renderer, WHITE + KING, currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &whiteKing;
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + KING, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new King(renderer, WHITE + KING, currentRow, currentColumn);
 			}
 				break;
 			case('P'):
@@ -272,7 +272,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | PAWN);
 				//Piece whitePawn = { renderer, WHITE + PAWN, currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &whitePawn;
-				piecesOnBoard[currentRow][currentColumn] = new Piece(renderer, WHITE + PAWN, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn] = new Pawn(renderer, WHITE + PAWN, currentRow, currentColumn);
 			}
 				break;
 			}

@@ -25,6 +25,8 @@ public:
 	void placePiece(SDL_Renderer* renderer, int x, int y);
 
 	static const char* getPiecePath(int pieceType);
+
+	virtual bool isMoveValid(int newColumn, int newRow) = 0;
 private:
 	
 

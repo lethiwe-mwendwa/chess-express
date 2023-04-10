@@ -1,6 +1,12 @@
 #pragma once
 #include "SDL.h"
 #include "Piece.h"
+#include "Bishop.h"
+#include "King.h"
+#include "Knight.h"
+#include "Queen.h"
+#include "Rook.h"
+#include "Pawn.h"
 
 
 // Declaring the features

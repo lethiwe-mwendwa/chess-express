@@ -24,9 +24,7 @@ Piece::Piece(SDL_Renderer* renderer,int type, int row, int column) {
 	this->pieceTexture = SDL_CreateTextureFromSurface(renderer, pieceSurface);
 	SDL_FreeSurface(pieceSurface);
 	
-	
 	//drawPeice(renderer, row, column);
-	
 	
 };
 
@@ -99,8 +97,8 @@ void Piece::drawPeice(SDL_Renderer* renderer, SDL_Rect imageRectLocation) {
 };
 
 void Piece::getPieceTrans(int newColumn, int newRow, int &transColumn, int &transRow) {
-	transColumn = this->pieceColumn + newColumn;
-	transRow = this->pieceRow + newRow;
+	transColumn = this->pieceColumn - newColumn;
+	transRow = this->pieceRow - newRow;
 }
 
 void Piece::placePiece(SDL_Renderer* renderer, int x, int y) {

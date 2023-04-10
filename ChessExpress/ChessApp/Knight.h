@@ -1,10 +1,15 @@
 #pragma once
 #include "Piece.h"
-class Knight :
-    public Piece
+class Knight : public Piece
 {
-    int validMoves[2] = {
-        (2,1),(1,2)
-    };
+    public:
+    Knight(SDL_Renderer* renderer, int type, int row, int column) :
+    Piece(renderer, type, row, column) {
+
+    }
+    static const int validMoveLen = 2;
+    static const int validMoves[validMoveLen][2];
+
+    bool isMoveValid(int newColumn, int newRow) override;
 };
 

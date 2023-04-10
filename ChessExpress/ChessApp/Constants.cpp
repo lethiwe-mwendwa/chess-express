@@ -6,7 +6,8 @@ int SCREEN_HEIGHT = 720;
 int gameTileSize;
 bool isDragging = false;
 SDL_Rect mouseRect = {};
-Piece* clickedPiece = new Piece(NULL, NULL, NULL, NULL);
+//visit this later
+Piece* clickedPiece = new Pawn(NULL, NULL, NULL, NULL);
 
 const char* pieceImagePaths[][2] = {
 	{ "assets/P.bmp", "assets/bP.bmp" },

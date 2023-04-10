@@ -3,11 +3,15 @@
 class King :
     public Piece
 {
-    static int validMoveLen;
-    int validMoves[validMoveLen] = {
-        (1,1),(1,0),(0,1)
-    };
+    public:
+    King(SDL_Renderer* renderer, int type, int row, int column) :
+    Piece(renderer, type, row, column) {
 
-    bool isMoveValid(int newColumn, int newRow);
+    }
+
+    static const int validMoveLen = 3;
+    static const int validMoves[validMoveLen][2];
+
+    bool isMoveValid(int newColumn, int newRow) override;
 };
 

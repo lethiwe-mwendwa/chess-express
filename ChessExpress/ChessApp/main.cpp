@@ -146,48 +146,53 @@ int main(int argc, char* argv[])
 						if (findClickedRect(event.button.x, event.button.y)) {
 							bool freeSpace = not(findClickedPiece(event.button.x, event.button.y));
 
-
+							int clickedRow;
+							int clickedColumn;
+							findClickedCords(event.button.x, event.button.y,clickedRow,clickedColumn);
+							bool validMove = clickedPiece->isMoveValid(clickedColumn,clickedRow);
+							cout << endl << validMove << endl;
 							//player turn check
 
 							//if playerturn == 'w'
 
-
-							
-							if (freeSpace) {
-								clickedPiece->placePiece(renderer, event.button.x, event.button.y);
-								if (playerTurn == 'w') {
-									playerTurn = 'b';
-								}
-								else if (playerTurn == 'b') {
-									playerTurn = 'w';
-								}
-							}
-							else {
-								Piece* pieceInTheWay = findClickedPiece(event.button.x, event.button.y);
-
-								if (playerTurn == 'w') {
-									if (pieceInTheWay->pieceType & BLACK) {
-										//kill piece
-										pieceInTheWay->killPeice();
-										clickedPiece->placePiece(renderer, event.button.x, event.button.y);
+							if (validMove) {
+								if (freeSpace) {
+									clickedPiece->placePiece(renderer, event.button.x, event.button.y);
+									if (playerTurn == 'w') {
 										playerTurn = 'b';
-										
 									}
-								}
-								else if (playerTurn == 'b') {
-									// DUDE fix the whole, is 0 thing, lmao
-									
-									if ((pieceInTheWay->pieceType & WHITE)){
-										//kill piece
-										pieceInTheWay->killPeice();
-										clickedPiece->placePiece(renderer, event.button.x, event.button.y);
+									else if (playerTurn == 'b') {
 										playerTurn = 'w';
-										
-										
 									}
 								}
+								else {
+									Piece* pieceInTheWay = findClickedPiece(event.button.x, event.button.y);
 
+									if (playerTurn == 'w') {
+										if (pieceInTheWay->pieceType & BLACK) {
+											//kill piece
+											pieceInTheWay->killPeice();
+											clickedPiece->placePiece(renderer, event.button.x, event.button.y);
+											playerTurn = 'b';
+
+										}
+									}
+									else if (playerTurn == 'b') {
+										// DUDE fix the whole, is 0 thing, lmao
+
+										if ((pieceInTheWay->pieceType & WHITE)) {
+											//kill piece
+											pieceInTheWay->killPeice();
+											clickedPiece->placePiece(renderer, event.button.x, event.button.y);
+											playerTurn = 'w';
+
+
+										}
+									}
+
+								}
 							}
+							
 						}
 						
 						Board::pieceDisplay(renderer);
