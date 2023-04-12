@@ -7,9 +7,7 @@
 #include "Inputs.h"
 #include <cstring>
 #include "King.h"
-
 using namespace std;
-
 
 //Temp Function
 void titleSequence(SDL_Renderer* renderer, int sWidth, int sHeight);
@@ -197,8 +195,9 @@ int main(int argc, char* argv[])
 						
 						Board::pieceDisplay(renderer);
 						SDL_RenderPresent(renderer);
+
 						cout << piecePlacement << endl;
-						cout << playerTurn << endl;
+						cout << playerTurn << endl;   // WHEEEE
 						cout << castlingAbility << endl;
 						cout << enPassantTarget << endl;
 						cout << halfmoveClock << endl;

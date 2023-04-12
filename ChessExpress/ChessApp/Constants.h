@@ -8,7 +8,6 @@
 #include "Rook.h"
 #include "Pawn.h"
 
-
 // Declaring the features
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;

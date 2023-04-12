@@ -18,9 +18,6 @@ const char* pieceImagePaths[][2] = {
 	{ "assets/N.bmp", "assets/bN.bmp" }
 };
 
-//SDL_Texture* pieceRenderCache[][2];
-
-
 SDL_Rect boardTiles[boardSize][boardSize];
 
 Piece* piecesOnBoard[boardSize][boardSize];
