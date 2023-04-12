@@ -7,7 +7,7 @@ class Pawn : public Piece
 	public:
     Pawn(SDL_Renderer* renderer, int type, int row, int column) :
 	Piece(renderer, type, row, column) {
-		this->hasMovedYet = true;
+		this->hasMovedYet = false;
 	}
 
 	bool hasMovedYet;
