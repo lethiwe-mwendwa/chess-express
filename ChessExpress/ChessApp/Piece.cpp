@@ -101,6 +101,7 @@ void Piece::getPieceTrans(int newColumn, int newRow, int &transColumn, int &tran
 	transRow = this->pieceRow - newRow;
 }
 
+
 void Piece::placePiece(SDL_Renderer* renderer, int x, int y) {
 
 	clickedPiece = this;

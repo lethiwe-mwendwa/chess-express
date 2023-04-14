@@ -112,4 +112,8 @@
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Piece.cd" />
+    <None Include="Bishop.cd" />
+  </ItemGroup>
 </Project>

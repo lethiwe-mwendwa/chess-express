@@ -84,6 +84,17 @@ void Board::drawBoard(SDL_Renderer* renderer, float width, float height) {
 	statusTile.y = 0 + (height - statusTile.h) / 2;
 };
 
+void Board::changeTurn(SDL_Renderer * renderer) {
+	if (playerTurn == 'w') {
+		playerTurn = 'b';
+		SDL_RenderCopy(renderer, blackTurnTexture, NULL, &statusTile);
+	}
+	else {
+		playerTurn = 'w';
+		SDL_RenderCopy(renderer, whiteTurnTexture, NULL, &statusTile);
+	}
+}
+
 void Board::fenSplitter(char fen[]) {
 	// fix with meaningful names later
 	bool placementDone = false;
@@ -287,6 +298,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece blackKing = { renderer, BLACK + KING, currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &blackKing;
 				piecesOnBoard[currentRow][currentColumn] = new King(renderer, BLACK + KING, currentRow, currentColumn);
+				blackKing = piecesOnBoard[currentRow][currentColumn];
 			}
 				break;
 			case('p'):
@@ -335,6 +347,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				//Piece whiteKing = { renderer, WHITE + KING, currentRow,currentColumn };
 				//piecesOnBoard[currentRow][currentColumn] = &whiteKing;
 				piecesOnBoard[currentRow][currentColumn] = new King(renderer, WHITE + KING, currentRow, currentColumn);
+				whiteKing = piecesOnBoard[currentRow][currentColumn];
 			}
 				break;
 			case('P'):

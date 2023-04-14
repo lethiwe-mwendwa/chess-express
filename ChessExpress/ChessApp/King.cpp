@@ -18,9 +18,13 @@ bool King::isMoveValid(int newColumn, int newRow)
 	return false;
 }
 
+
 bool King::isKillValid(int newColumn, int newRow)
 {
-	return King::isMoveValid(newColumn, newRow);
+	if (King::isMoveValid(newColumn, newRow) and (piecesOnBoard[newRow][newColumn]->pieceType & COLOUR_MASK) != (this->pieceType & COLOUR_MASK)) {
+		return true;
+	}
+	return false;
 }
 
 const int King::validMoves[King::validMoveLen][2]{

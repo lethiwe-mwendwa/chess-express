@@ -11,6 +11,6 @@ class Bishop : public Piece
 	bool isKillValid(int newColumn, int newRow) override;
 	static bool isTransD(int row, int column);
 
-	
+	static bool isPathClear(int oldColumn, int oldRow, int newColumn, int newRow);
 };
 

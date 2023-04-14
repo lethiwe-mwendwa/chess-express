@@ -3,7 +3,10 @@
 
 bool Knight::isKillValid(int newColumn, int newRow)
 {
-	return Knight::isMoveValid(newColumn, newRow);
+	if (Knight::isMoveValid(newColumn, newRow) and (piecesOnBoard[newRow][newColumn]->pieceType & COLOUR_MASK) != (this->pieceType & COLOUR_MASK)) {
+		return true;
+	}
+	return false;
 }
 
 bool Knight::isMoveValid(int newColumn, int newRow)

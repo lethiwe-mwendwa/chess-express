@@ -28,6 +28,7 @@ const int KNIGHT = 6;
 const int BLACK = 8;
 //const int WHITE = 0;
 const int WHITE = 16;
+const int COLOUR_MASK = 24;
 const int TYPE_MASK = 7;
 
 const int boardSize=8;
@@ -35,11 +36,17 @@ const int boardSize=8;
 extern const char titleImagePath[];
 extern const char pressEnterImagePath[];
 
+extern const char* chessExpressASCII;
+extern const char* lethiweMwendwaASCII;
+
 
 extern SDL_Rect boardTiles[boardSize][boardSize];
 
 extern Piece* piecesOnBoard[boardSize][boardSize];
 
+extern Piece* whiteKing;
+
+extern Piece* blackKing;
 
 //Fen stuff
 

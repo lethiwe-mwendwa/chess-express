@@ -58,9 +58,8 @@ int main(int argc, char* argv[])
 	SDL_FreeSurface(icon);
 
 
-
+	cout << chessExpressASCII << endl;
 	titleSequence(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-
 	while (titleScreen) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
@@ -69,7 +68,7 @@ int main(int argc, char* argv[])
 				break;
 			}
 			if (event.type == SDL_KEYDOWN) {
-				cout << event.key.keysym.sym << endl;
+				//cout << event.key.keysym.sym << endl;
 				if (event.key.keysym.sym == SDLK_RETURN) {
 
 					titleScreen = false;
@@ -80,8 +79,8 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
-
-
+	cout << lethiweMwendwaASCII << endl ;
+	cout << "Librarys used:" << endl << "SDL2, SDL2_Mixer" << endl << endl;
 
 	//Create the board. (Make function to create the board and render pieces in default mode once FEN notation is done.
 	Board::initBoardTextures(renderer);
@@ -96,13 +95,12 @@ int main(int argc, char* argv[])
 	//Temporary testing:
 	//test code
 
-
 	cout << piecePlacement << endl;
 	cout << playerTurn << endl;
 	cout << castlingAbility << endl;
 	cout << enPassantTarget << endl;
 	cout << halfmoveClock << endl;
-	cout << fullmoveClock << endl;
+	cout << fullmoveClock << endl << endl;
 
 	// The game loop
 
@@ -141,7 +139,7 @@ int main(int argc, char* argv[])
 					//SDL_RenderPresent(renderer);
 					//}
 
-					
+
 
 					if (not(isDragging) && findClickedPiece(event.button.x, event.button.y)) {
 						clickedPiece = findClickedPiece(event.button.x, event.button.y);
@@ -160,7 +158,7 @@ int main(int argc, char* argv[])
 						mouseRect.w = gameTileSize;
 
 						isDragging = true;
-						
+
 					}
 					break;
 				}
@@ -173,110 +171,59 @@ int main(int argc, char* argv[])
 						Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 						if (findClickedRect(event.button.x, event.button.y)) {
-							bool freeSpace = not(findClickedPiece(event.button.x, event.button.y));
 
+							bool freeSpace = not(findClickedPiece(event.button.x, event.button.y));
 							int clickedRow;
 							int clickedColumn;
-							findClickedCords(event.button.x, event.button.y,clickedRow,clickedColumn);
+							findClickedCords(event.button.x, event.button.y, clickedRow, clickedColumn);
 							bool validMove = false;
 							if (freeSpace) {
 								validMove = clickedPiece->isMoveValid(clickedColumn, clickedRow);
-
 							}
 							else {
 								validMove = clickedPiece->isKillValid(clickedColumn, clickedRow);
 							}
-							//player turn check
 
-							//if playerturn == 'w'
 
 							if (validMove) {
 								if (freeSpace) {
 									clickedPiece->placePiece(renderer, event.button.x, event.button.y);
-									if (playerTurn == 'w') {
-										playerTurn = 'b';
-										Board::pieceDisplay(renderer);
-										SDL_RenderCopy(renderer, blackTurnTexture, NULL, &statusTile);
-
-										
-									}
-									else if (playerTurn == 'b') {
-										playerTurn = 'w';
-										Board::pieceDisplay(renderer);
-										SDL_RenderCopy(renderer, whiteTurnTexture, NULL, &statusTile);
-
-
-									}
-									
-
+									Board::pieceDisplay(renderer);
+									Board::changeTurn(renderer);
 									int moveChannel = Mix_PlayChannel(-1, move, 0);
 									if (moveChannel == -1) {
 										printf("Failed to play move sound: %s\n", Mix_GetError());
 									}
 								}
-								else{
+								else {
 									Piece* pieceInTheWay = findClickedPiece(event.button.x, event.button.y);
-
-									if (playerTurn == 'w') {
-										if (pieceInTheWay->pieceType & BLACK) {
-											//kill piece
-											pieceInTheWay->killPeice();
-											clickedPiece->placePiece(renderer, event.button.x, event.button.y);
-											playerTurn = 'b';
-
-											Board::pieceDisplay(renderer);
-											SDL_RenderCopy(renderer, blackTurnTexture, NULL, &statusTile);
-
-											
-
-										}
-
-									}
-									else if (playerTurn == 'b') {
-										// DUDE fix the whole, is 0 thing, lmao
-
-										if ((pieceInTheWay->pieceType & WHITE)) {
-											//kill piece
-											pieceInTheWay->killPeice();
-											clickedPiece->placePiece(renderer, event.button.x, event.button.y);
-											playerTurn = 'w';
-
-											Board::pieceDisplay(renderer);
-											SDL_RenderCopy(renderer, whiteTurnTexture, NULL, &statusTile);
-											
-											
-										}
-									}
-
-									
+									pieceInTheWay->killPeice();
+									clickedPiece->placePiece(renderer, event.button.x, event.button.y);
+									Board::pieceDisplay(renderer);
+									Board::changeTurn(renderer);
 									int dieChannel = Mix_PlayChannel(-1, die, 0);
 									if (dieChannel == -1) {
 										printf("Failed to play die sound: %s\n", Mix_GetError());
 									}
 								}
+
 								SDL_RenderPresent(renderer);
 								SDL_Delay(500);
 								Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 								//Board::pieceDisplay(renderer);
 								//SDL_RenderPresent(renderer);
 								cout << piecePlacement << endl;
-								cout << playerTurn << endl;   // WHEEEE
+								cout << playerTurn << endl;   // check
 								cout << castlingAbility << endl;
 								cout << enPassantTarget << endl;
 								cout << halfmoveClock << endl;
-								cout << fullmoveClock << endl;
+								cout << fullmoveClock << endl << endl;
 							}
-							else {
-								
-							}
+
 							
 						}
-
 						Board::pieceDisplay(renderer);
 						SDL_RenderPresent(renderer);
-						
-						
-						
 					}
 
 
@@ -311,7 +258,7 @@ int main(int argc, char* argv[])
 			// Cap to 60 FPS
 			//SDL_Delay(10);
 		}
-		
+
 	}
 	Mix_FreeChunk(die);
 	Mix_FreeChunk(move);
@@ -324,6 +271,7 @@ int main(int argc, char* argv[])
 //VERY MESSY. Make function for desplaying certain things in specific places.
 
 void titleSequence(SDL_Renderer* renderer, int sWidth, int sHeight ){
+	
 	SDL_SetRenderDrawColor(renderer, 5, 50, 70, 255);
 	SDL_RenderClear(renderer);
 	SDL_Surface* imageSurface = NULL;
