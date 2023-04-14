@@ -11,5 +11,6 @@ class Knight : public Piece
     static const int validMoves[validMoveLen][2];
 
     bool isMoveValid(int newColumn, int newRow) override;
+    bool isKillValid(int newColumn, int newRow) override;
 };
 

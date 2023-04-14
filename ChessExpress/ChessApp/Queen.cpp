@@ -15,3 +15,8 @@ bool Queen::isMoveValid(int newColumn, int newRow)
     }
     return false;
 }
+
+bool Queen::isKillValid(int newColumn, int newRow)
+{
+    return Queen::isMoveValid(newColumn, newRow);
+}

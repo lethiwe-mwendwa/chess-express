@@ -20,6 +20,11 @@ bool Rook::isMoveValid(int newColumn, int newRow)
 	return false;
 }
 
+bool Rook::isKillValid(int newColumn, int newRow)
+{
+	return Rook::isMoveValid(newColumn, newRow);
+}
+
 bool Rook::isTransVorH(int row, int column) {
 	if (row == 0 or column == 0) {
 		return true;

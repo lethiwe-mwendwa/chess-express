@@ -54,6 +54,7 @@ int main(int argc, char* argv[])
 
 
 	//Create the board. (Make function to create the board and render pieces in default mode once FEN notation is done.
+	Board::initBoardTextures(renderer);
 	Board::fenSplitter(currentFen);
 	Board::fenSetup(renderer, piecePlacement);
 	Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -147,8 +148,14 @@ int main(int argc, char* argv[])
 							int clickedRow;
 							int clickedColumn;
 							findClickedCords(event.button.x, event.button.y,clickedRow,clickedColumn);
-							bool validMove = clickedPiece->isMoveValid(clickedColumn,clickedRow);
-							cout << endl << validMove << endl;
+							bool validMove = false;
+							if (freeSpace) {
+								validMove = clickedPiece->isMoveValid(clickedColumn, clickedRow);
+
+							}
+							else {
+								validMove = clickedPiece->isKillValid(clickedColumn, clickedRow);
+							}
 							//player turn check
 
 							//if playerturn == 'w'
@@ -158,12 +165,20 @@ int main(int argc, char* argv[])
 									clickedPiece->placePiece(renderer, event.button.x, event.button.y);
 									if (playerTurn == 'w') {
 										playerTurn = 'b';
+										Board::pieceDisplay(renderer);
+										SDL_RenderCopy(renderer, blackTurnTexture, NULL, &statusTile);
+
+										
 									}
 									else if (playerTurn == 'b') {
 										playerTurn = 'w';
+										Board::pieceDisplay(renderer);
+										SDL_RenderCopy(renderer, whiteTurnTexture, NULL, &statusTile);
+
+
 									}
 								}
-								else {
+								else{
 									Piece* pieceInTheWay = findClickedPiece(event.button.x, event.button.y);
 
 									if (playerTurn == 'w') {
@@ -173,7 +188,13 @@ int main(int argc, char* argv[])
 											clickedPiece->placePiece(renderer, event.button.x, event.button.y);
 											playerTurn = 'b';
 
+											Board::pieceDisplay(renderer);
+											SDL_RenderCopy(renderer, blackTurnTexture, NULL, &statusTile);
+
+											
+
 										}
+
 									}
 									else if (playerTurn == 'b') {
 										// DUDE fix the whole, is 0 thing, lmao
@@ -184,24 +205,36 @@ int main(int argc, char* argv[])
 											clickedPiece->placePiece(renderer, event.button.x, event.button.y);
 											playerTurn = 'w';
 
-
+											Board::pieceDisplay(renderer);
+											SDL_RenderCopy(renderer, whiteTurnTexture, NULL, &statusTile);
+											
+											
 										}
 									}
 
+									
 								}
+								SDL_RenderPresent(renderer);
+								SDL_Delay(500);
+								Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+								//Board::pieceDisplay(renderer);
+								//SDL_RenderPresent(renderer);
+								cout << piecePlacement << endl;
+								cout << playerTurn << endl;   // WHEEEE
+								cout << castlingAbility << endl;
+								cout << enPassantTarget << endl;
+								cout << halfmoveClock << endl;
+								cout << fullmoveClock << endl;
+							}
+							else {
+								
 							}
 							
 						}
-						
+
 						Board::pieceDisplay(renderer);
 						SDL_RenderPresent(renderer);
-
-						cout << piecePlacement << endl;
-						cout << playerTurn << endl;   // WHEEEE
-						cout << castlingAbility << endl;
-						cout << enPassantTarget << endl;
-						cout << halfmoveClock << endl;
-						cout << fullmoveClock << endl;
+						
 						
 						
 					}

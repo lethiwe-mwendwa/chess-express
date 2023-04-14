@@ -18,9 +18,44 @@ const char* pieceImagePaths[][2] = {
 	{ "assets/N.bmp", "assets/bN.bmp" }
 };
 
+const char blackTurnPath[] = "assets/BLACK.bmp";
+const char whiteTurnPath[] = "assets/WHITE.bmp";
+SDL_Texture* blackTurnTexture = {};
+SDL_Texture* whiteTurnTexture = {};
+
+const char* numPaths[boardSize]{ 
+	"assets/tile8.bmp",
+	"assets/tile7.bmp",
+	"assets/tile6.bmp",
+	"assets/tile5.bmp",
+	"assets/tile4.bmp",
+	"assets/tile3.bmp",
+	"assets/tile2.bmp",
+	"assets/tilea1.bmp",
+
+};
+const char* letterPaths[boardSize]{
+	"assets/tilea1.bmp",
+	"assets/tileb.bmp",
+	"assets/tilec.bmp",
+	"assets/tiled.bmp",
+	"assets/tilee.bmp",
+	"assets/tilef.bmp",
+	"assets/tileg.bmp",
+	"assets/tileh.bmp",
+};
+
+
 SDL_Rect boardTiles[boardSize][boardSize];
 
+SDL_Rect statusTile = {};
+
 Piece* piecesOnBoard[boardSize][boardSize];
+
+
+SDL_Texture* letterTextures[boardSize];
+SDL_Texture* numTextures[boardSize];
+
 
 const char titleImagePath[] = "assets/ChessXpress.bmp";
 const char pressEnterImagePath[] = "assets/pressEnter.bmp";

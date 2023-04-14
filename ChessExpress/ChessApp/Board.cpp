@@ -52,6 +52,12 @@ void Board::drawBoard(SDL_Renderer* renderer, float width, float height) {
 			
 			boardTiles[i][j] = tile;
 			SDL_RenderFillRect(renderer, &tile);
+			if (j == 0) {
+				Board::chessNumDisplay(renderer, i);
+			}
+			else if (i == 7) {
+				Board::chessLetterDisplay(renderer, j);
+			}
 
 			tileWidthInc += tileSize;
 		}
@@ -63,6 +69,19 @@ void Board::drawBoard(SDL_Renderer* renderer, float width, float height) {
 	gameTileSize = tileSize;
 	SCREEN_WIDTH = width;
 	SCREEN_HEIGHT = height;
+	// make a function from this.... like... rect resize or something? or rect size? for images.
+	if (width > height) {
+		statusTile.w = width * 0.4;
+		statusTile.h = ((statusTile.w) * 16) / 75;
+	}
+	else {
+
+		statusTile.h = height * 0.1;
+		statusTile.w = ((statusTile.h) * 75) / 16;
+	}
+
+	statusTile.x = 0 + (width - statusTile.w) / 2;
+	statusTile.y = 0 + (height - statusTile.h) / 2;
 };
 
 void Board::fenSplitter(char fen[]) {
@@ -133,7 +152,15 @@ void Board::fenSplitter(char fen[]) {
 		}
 	}
 
+}
 
+char Board::getChessCord(int row, int column)
+{
+	return NULL;
+}
+
+void Board::translateChessCord(char chessCord[])
+{
 }
 
 void Board::pieceDisplay(SDL_Renderer* renderer, Piece* selectedPiece)
@@ -146,6 +173,49 @@ void Board::pieceDisplay(SDL_Renderer* renderer, Piece* selectedPiece)
 			}
 		}
 	}
+}
+
+void Board::initBoardTextures(SDL_Renderer * renderer){
+
+	for (int i = 0; i < boardSize; i++) {
+
+		SDL_Surface* numSurface = SDL_LoadBMP(numPaths[i]);
+		SDL_Surface* letterSurface = SDL_LoadBMP(letterPaths[i]);
+
+		if (NULL == numSurface or NULL == letterSurface) {
+			cout << "SDL error bozo" << SDL_GetError();
+		}
+
+		numTextures[i] = SDL_CreateTextureFromSurface(renderer, numSurface);
+		letterTextures[i] = SDL_CreateTextureFromSurface(renderer, letterSurface);
+		SDL_FreeSurface(numSurface);
+		SDL_FreeSurface(letterSurface);
+	}
+
+	SDL_Surface* wTurnSurface = SDL_LoadBMP(whiteTurnPath);
+	SDL_Surface* bTurnSurface = SDL_LoadBMP(blackTurnPath);
+
+	if (NULL == wTurnSurface or NULL == bTurnSurface) {
+		cout << "SDL error bozo" << SDL_GetError();
+	}
+
+	whiteTurnTexture = SDL_CreateTextureFromSurface(renderer, wTurnSurface);
+	blackTurnTexture = SDL_CreateTextureFromSurface(renderer, bTurnSurface);
+	SDL_FreeSurface(wTurnSurface);
+	SDL_FreeSurface(bTurnSurface);
+	
+}
+
+void Board::chessNumDisplay(SDL_Renderer* renderer, int row){
+	//int invertedRow = abs( boardSize - row - 1);
+	//cout << numPaths[row] << endl;
+	SDL_Texture* numTexture = numTextures[row];
+	SDL_RenderCopy(renderer, numTexture, NULL, &boardTiles[row][0]);
+}
+
+void Board::chessLetterDisplay(SDL_Renderer* renderer, int column){
+	SDL_Texture* letterTexture = letterTextures[column];
+	SDL_RenderCopy(renderer, letterTexture, NULL, &boardTiles[7][column]);
 }
 
 void Board::fenSetup(SDL_Renderer* renderer, char fen[])

@@ -21,3 +21,8 @@ bool Bishop::isTransD(int row, int column) {
 	}
 	return false;
 }
+
+bool Bishop::isKillValid(int newColumn, int newRow)
+{
+	return Bishop::isMoveValid(newColumn, newRow);
+}

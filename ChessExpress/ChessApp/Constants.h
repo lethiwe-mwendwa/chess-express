@@ -56,3 +56,18 @@ extern char fullmoveClock[];
 extern char currentFen[];
 
 extern const char* pieceImagePaths[][2];
+
+extern const char* numPaths[boardSize];
+extern const char* letterPaths[boardSize];
+
+extern SDL_Texture* letterTextures[boardSize];
+extern SDL_Texture* numTextures[boardSize];
+
+extern SDL_Texture* blackTurnTexture;
+extern SDL_Texture* whiteTurnTexture;
+
+extern const char blackTurnPath[];
+extern const char whiteTurnPath[];
+
+
+extern SDL_Rect statusTile;

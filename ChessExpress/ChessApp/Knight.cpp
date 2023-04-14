@@ -1,6 +1,11 @@
 #include "Knight.h"
 #include "Constants.h"
 
+bool Knight::isKillValid(int newColumn, int newRow)
+{
+	return Knight::isMoveValid(newColumn, newRow);
+}
+
 bool Knight::isMoveValid(int newColumn, int newRow)
 {
 	int transColumn;

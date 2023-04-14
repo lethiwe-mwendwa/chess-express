@@ -18,6 +18,11 @@ bool King::isMoveValid(int newColumn, int newRow)
 	return false;
 }
 
+bool King::isKillValid(int newColumn, int newRow)
+{
+	return King::isMoveValid(newColumn, newRow);
+}
+
 const int King::validMoves[King::validMoveLen][2]{
 		{1,1},{1,0},{0,1}
 };
