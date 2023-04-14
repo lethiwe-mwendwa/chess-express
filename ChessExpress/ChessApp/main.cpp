@@ -5,8 +5,9 @@
 #include <iostream>
 #include <algorithm>
 #include "Inputs.h"
-#include <cstring>
+#include "SDL_mixer.h"
 #include "King.h"
+
 using namespace std;
 
 //Temp Function
@@ -18,6 +19,35 @@ bool gameRunning = true;
 int main(int argc, char* argv[])
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
+	Mix_Init(0);
+	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024);
+	// Initialize SDL_mixer
+	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) {
+		printf("Failed to initialize SDL_mixer: %s\n", Mix_GetError());
+		return 1;
+	}
+
+	// At this point, the audio device is open and ready to use
+
+	// ...
+
+	// Clean up SDL_mixer when you're done
+	Mix_CloseAudio();
+
+	Mix_Chunk* die = Mix_LoadWAV("assets/die.wav");
+	Mix_Chunk* move = Mix_LoadWAV("assets/move.wav");
+
+	if (die == NULL) {
+		printf("Failed to load die sound: %s\n", Mix_GetError());
+		return 1;
+	}
+
+	if (move == NULL) {
+		printf("Failed to load move sound: %s\n", Mix_GetError());
+		Mix_FreeChunk(die);
+		return 1;
+	}
+	//Mix_Volume(60);
 
 	//Window and Renderer creation
 	SDL_Window* window = SDL_CreateWindow("Chess Express", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -177,6 +207,12 @@ int main(int argc, char* argv[])
 
 
 									}
+									
+
+									int moveChannel = Mix_PlayChannel(-1, move, 0);
+									if (moveChannel == -1) {
+										printf("Failed to play move sound: %s\n", Mix_GetError());
+									}
 								}
 								else{
 									Piece* pieceInTheWay = findClickedPiece(event.button.x, event.button.y);
@@ -213,6 +249,10 @@ int main(int argc, char* argv[])
 									}
 
 									
+									int dieChannel = Mix_PlayChannel(-1, die, 0);
+									if (dieChannel == -1) {
+										printf("Failed to play die sound: %s\n", Mix_GetError());
+									}
 								}
 								SDL_RenderPresent(renderer);
 								SDL_Delay(500);
@@ -273,7 +313,8 @@ int main(int argc, char* argv[])
 		}
 		
 	}
-
+	Mix_FreeChunk(die);
+	Mix_FreeChunk(move);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
