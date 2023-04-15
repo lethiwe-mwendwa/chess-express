@@ -83,6 +83,11 @@ bool Pawn::isPathClear(int newRow)
 	}
 }
 
+void Pawn::getAttackTiles(Piece* piece)
+{
+
+}
+
 const int Pawn::validMovesW[Pawn::validMoveLen][2] = {
 		{1,0},{2,0},{1,-1},{1,1}
 };

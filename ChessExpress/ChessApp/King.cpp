@@ -27,6 +27,10 @@ bool King::isKillValid(int newColumn, int newRow)
 	return false;
 }
 
+void King::getAttackTiles(Piece* piece)
+{
+}
+
 const int King::validMoves[King::validMoveLen][2]{
 		{1,1},{1,0},{0,1}
 };

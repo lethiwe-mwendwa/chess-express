@@ -48,6 +48,7 @@ const char* letterPaths[boardSize]{
 
 SDL_Rect boardTiles[boardSize][boardSize];
 
+//dont recall what this was for... hmm
 SDL_Rect statusTile = {};
 
 Piece* piecesOnBoard[boardSize][boardSize];

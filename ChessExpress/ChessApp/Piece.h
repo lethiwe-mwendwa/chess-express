@@ -29,6 +29,9 @@ public:
 	virtual bool isMoveValid(int newColumn, int newRow) = 0;
 	virtual bool isKillValid(int newColumn, int newRow) = 0;
 
+	virtual void getAttackTiles(Piece* piece) = 0;
+	virtual bool inAttackZone(int newColumn, int newRow) = 0;
+
 private:
 	
 

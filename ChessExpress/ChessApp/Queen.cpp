@@ -24,3 +24,12 @@ bool Queen::isKillValid(int newColumn, int newRow)
     }
     return false;
 }
+
+void Queen::getAttackTiles(Piece* piece)
+{
+}
+
+bool Queen::inAttackZone(int newColumn, int newRow)
+{
+    return false;
+}

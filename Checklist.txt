@@ -1,0 +1,20 @@
+1. Report
+Status: ?
+
+2. Declaration of ownership (which will include specific details of any code
+sourced from elsewhere)
+Status: ?
+
+3. 
+-Executable and source code, including .sln and .proj files (to enable the
+tutor to browse the project structure)
+-and associated text
+-image files where necessary.
+-Any code sourced from elsewhere must be clearly
+identified within the source files.
+Status: ?
+
+
+4. Demo File. A 5-10 minute demonstration of your program using video
+screen capture software
+Status: ?

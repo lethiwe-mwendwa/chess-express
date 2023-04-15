@@ -13,5 +13,10 @@ class Knight : public Piece
     bool isMoveValid(int newColumn, int newRow) override;
     bool isKillValid(int newColumn, int newRow) override;
 
+    SDL_Rect* attackZone[8];
+
+    void getAttackTiles(Piece* piece) override;
+    bool inAttackZone(int newColumn, int newRow) override;
+
 };
 

@@ -26,6 +26,19 @@ bool Knight::isMoveValid(int newColumn, int newRow)
 	return false;
 }
 
+void Knight::getAttackTiles(Piece* piece)
+{
+	for (int i = 0; i < 8; i++) {
+		//this->attackZone[i] = 
+	}
+	
+}
+
+bool Knight::inAttackZone(int newColumn, int newRow)
+{
+	return false;
+}
+
 const int Knight::validMoves[Knight::validMoveLen][2] = {
 		{2,1}, {1,2}
 };

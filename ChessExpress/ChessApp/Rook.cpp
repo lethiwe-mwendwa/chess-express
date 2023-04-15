@@ -67,3 +67,12 @@ bool Rook::isPathClear(int oldColumn, int oldRow, int newColumn, int newRow)
 	return true;
 
 }
+
+void Rook::getAttackTiles(Piece* piece)
+{
+}
+
+bool Rook::inAttackZone(int newColumn, int newRow)
+{
+	return false;
+}
