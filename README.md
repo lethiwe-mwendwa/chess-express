@@ -1,4 +1,4 @@
-<span style="color:#1e81b0"># Chess X-Press</span>
+<span style="color:#1e81b0">#Chess X-Press</span>
 
 Creating chess for my coursework at Nottingham Trent University, using C++, SDL2 and SDL2_Mixer.
 
