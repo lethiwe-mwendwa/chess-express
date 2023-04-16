@@ -26,7 +26,7 @@ bool Rook::isKillValid(int newColumn, int newRow)
 }
 
 bool Rook::isTransVorH(int row, int column) {
-	if (row == 0 or column == 0) {
+	if ((row == 0 or column == 0) and (row != column)) {
 		return true;
 	}
 	return false;
@@ -66,13 +66,4 @@ bool Rook::isPathClear(int oldColumn, int oldRow, int newColumn, int newRow)
 	}
 	return true;
 
-}
-
-void Rook::getAttackTiles(Piece* piece)
-{
-}
-
-bool Rook::inAttackZone(int newColumn, int newRow)
-{
-	return false;
 }

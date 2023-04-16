@@ -13,9 +13,6 @@ class Rook : public Piece
 	static bool isTransVorH(int row, int column);
 	static bool isPathClear(int oldColumn, int oldRow, int newColumn, int newRow);
 
-	SDL_Rect* attackZone[];
 
-	void getAttackTiles(Piece* piece) override;
-	bool inAttackZone(int newColumn, int newRow) override;
 };
 

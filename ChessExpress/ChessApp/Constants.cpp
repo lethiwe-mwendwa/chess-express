@@ -1,12 +1,16 @@
 #include "Constants.h"
 
+
 int SCREEN_WIDTH = 900;
 int SCREEN_HEIGHT = 720;
 
 int gameTileSize;
 bool isDragging = false;
 SDL_Rect mouseRect = {};
-//visit this later
+
+extern SDL_Rect* moveSquares[] = { NULL, NULL };
+
+//This is the current selected Piece
 Piece* clickedPiece = new Pawn(NULL, NULL, NULL, NULL);
 
 const char* pieceImagePaths[][2] = {
@@ -20,8 +24,21 @@ const char* pieceImagePaths[][2] = {
 
 const char blackTurnPath[] = "assets/BLACK.bmp";
 const char whiteTurnPath[] = "assets/WHITE.bmp";
+
+const char blackCheckPath[] = "assets/BLACKCHECK.bmp";
+const char whiteCheckPath[] = "assets/WHITECHECK.bmp";
+
+const char blackCheckMatePath[] = "assets/BLACKCHECKMATE.bmp";
+const char whiteCheckMatePath[] = "assets/WHITECHECKMATE.bmp";
+
 SDL_Texture* blackTurnTexture = {};
 SDL_Texture* whiteTurnTexture = {};
+
+SDL_Texture* blackCheckTexture = {};
+SDL_Texture* whiteCheckTexture = {};
+
+SDL_Texture* blackCheckMateTexture = {};
+SDL_Texture* whiteCheckMateTexture = {};
 
 const char* numPaths[boardSize]{ 
 	"assets/tile8.bmp",
@@ -45,17 +62,22 @@ const char* letterPaths[boardSize]{
 	"assets/tileh.bmp",
 };
 
-
 SDL_Rect boardTiles[boardSize][boardSize];
 
-//dont recall what this was for... hmm
+// This rect is for displaying text in the center
+// e.g WHITE, BLACK, CHECK, CHECKMATE
 SDL_Rect statusTile = {};
 
 Piece* piecesOnBoard[boardSize][boardSize];
 
-Piece* whiteKing = new King(NULL, NULL, NULL, NULL);
+bool check = false;
+bool checkmate = false;
 
-Piece* blackKing = new King(NULL, NULL, NULL, NULL);
+bool isKingSelected = false;
+
+King* whiteKing = new King(NULL, NULL, NULL, NULL);
+
+King* blackKing = new King(NULL, NULL, NULL, NULL);
 
 
 SDL_Texture* letterTextures[boardSize];
@@ -75,6 +97,12 @@ char enPassantTarget[3] = { 0 };
 char halfmoveClock[3] = { 0 };
 char fullmoveClock[7] = { 0 };
 
+Mix_Chunk* dieA;
+Mix_Chunk* moveA;
+Mix_Chunk* introA;
+Mix_Chunk* startA;
+Mix_Chunk* checkA;
+Mix_Chunk* endGameA;
 
 const char* chessExpressASCII = R"(                                                                          
                                                                            

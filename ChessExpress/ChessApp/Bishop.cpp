@@ -16,7 +16,8 @@ bool Bishop::isMoveValid(int newColumn, int newRow)
 }
 
 bool Bishop::isTransD(int row, int column) {
-	if (row == column) {
+	
+	if (row != 0 and row == column) {
 		return true;
 	}
 	return false;
@@ -48,16 +49,6 @@ bool Bishop::isPathClear(int oldColumn, int oldRow, int newColumn, int newRow)
 	return true;
 
 }
-
-void Bishop::getAttackTiles(Piece* piece)
-{
-}
-
-bool Bishop::inAttackZone(int newColumn, int newRow)
-{
-	return false;
-}
-
 
 bool Bishop::isKillValid(int newColumn, int newRow)
 {

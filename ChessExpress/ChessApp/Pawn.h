@@ -21,9 +21,6 @@ class Pawn : public Piece
 
 	bool isPathClear(int newRow);
 
-	SDL_Rect* attackZone[];
-
-	void getAttackTiles(Piece* piece) override;
-	bool inAttackZone(int newColumn, int newRow) override;
+	void getAttackTiles() override;
 };
 

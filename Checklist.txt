@@ -3,7 +3,7 @@ Status: ?
 
 2. Declaration of ownership (which will include specific details of any code
 sourced from elsewhere)
-Status: ?
+Status: In progress
 
 3. 
 -Executable and source code, including .sln and .proj files (to enable the

@@ -83,8 +83,30 @@ bool Pawn::isPathClear(int newRow)
 	}
 }
 
-void Pawn::getAttackTiles(Piece* piece)
-{
+void Pawn::getAttackTiles(){
+	clearAttackTiles();
+
+	for (int i = 0; i < maxAttackTiles; i++) {
+		attackZone[i] = new SDL_Rect();
+	}
+
+	if (this->pieceType & WHITE) {
+		if (this->pieceRow > 0 and this->pieceColumn > 0) {
+			attackZone[numAttackTiles++] = &boardTiles[this->pieceRow - 1][this->pieceColumn - 1];
+		}
+		if (this->pieceRow > 0 and this->pieceColumn < 7) {
+			attackZone[numAttackTiles++] = &boardTiles[this->pieceRow - 1][this->pieceColumn + 1];
+		}
+		
+	}
+	else if (this->pieceType & BLACK) {
+		if (this->pieceRow < 7 and this->pieceColumn > 0) {
+			attackZone[numAttackTiles++] = &boardTiles[this->pieceRow + 1][this->pieceColumn - 1];
+		}
+		if (this->pieceRow < 7 and this->pieceColumn < 7) {
+			attackZone[numAttackTiles++] = &boardTiles[this->pieceRow + 1][this->pieceColumn + 1];
+		}
+	}
 
 }
 

@@ -4,6 +4,7 @@
 #include "Constants.h"
 #include <iostream>
 #include "Inputs.h"
+#include "Board.h"
 using namespace std;
 
 Piece::Piece(SDL_Renderer* renderer,int type, int row, int column) {
@@ -68,6 +69,34 @@ void Piece::killPeice()
 	delete this;
 }
 
+void Piece::getAttackTiles()
+{
+	this->clearAttackTiles();
+
+	for (int i = 0; i < maxAttackTiles; i++) {
+		this->attackZone[i] = new SDL_Rect();
+	}
+
+	for (int i = 0; i < boardSize; i++) {
+		for (int j = 0; j < boardSize; j++) {
+			if (this->isMoveValid(j, i) and (&boardTiles[i][j] != this->pieceRect)) {
+				this->attackZone[this->numAttackTiles++] = &boardTiles[i][j];
+			}
+		}
+	}
+
+}
+
+bool Piece::inAttackZone(int column, int row)
+{
+	for (int i = 0; i < maxAttackTiles; i++) {
+		if (this->attackZone[i] == &boardTiles[row][column]) {
+			return true;
+		}
+	}
+	return false;
+}
+
 /*
 void Piece::drawPeice(SDL_Renderer* renderer, int row, int column) {
 	//SDL_Surface* imageSurface = NULL;
@@ -125,5 +154,63 @@ void Piece::placePiece(SDL_Renderer* renderer, int x, int y) {
 
 
 	clickedPiece->drawPeice(renderer, newLocation);
+	
 
 };
+
+void Piece::clearAttackTiles() {
+	for (int i = 0; i < numAttackTiles && i < maxAttackTiles; i++) {
+		//delete attackZone[i];
+		this->attackZone[i] = nullptr;
+	}
+	this->numAttackTiles = 0;
+}
+
+char Piece::toFEN() {
+	if (this->pieceType & BLACK) {
+		switch (this->pieceType & TYPE_MASK) {
+		case(ROOK):
+			return 'r';
+			break;
+		case(KNIGHT):
+			return 'n';
+			break;
+		case(BISHOP):
+			return 'b';
+			break;
+		case(QUEEN):
+			return 'q';
+			break;
+		case(KING):
+			return 'k';
+			break;
+		case(PAWN):
+			return 'p';
+			break;
+		}
+	}
+	else {
+		switch (this->pieceType & TYPE_MASK) {
+		case(ROOK):
+			return 'R';
+			break;
+		case(KNIGHT):
+			return 'N';
+			break;
+		case(BISHOP):
+			return 'B';
+			break;
+		case(QUEEN):
+			return 'Q';
+			break;
+		case(KING):
+			return 'K';
+			break;
+		case(PAWN):
+			return 'P';
+			break;
+		}
+	}
+	return ' ';
+	
+}

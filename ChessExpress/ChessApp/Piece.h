@@ -29,12 +29,16 @@ public:
 	virtual bool isMoveValid(int newColumn, int newRow) = 0;
 	virtual bool isKillValid(int newColumn, int newRow) = 0;
 
-	virtual void getAttackTiles(Piece* piece) = 0;
-	virtual bool inAttackZone(int newColumn, int newRow) = 0;
+	virtual void getAttackTiles();
+	bool inAttackZone(int column, int row);
 
-private:
-	
+	void clearAttackTiles();
 
+	static const int maxAttackTiles = 64;
+	SDL_Rect* attackZone[maxAttackTiles];
+	int numAttackTiles = 0;
+
+	char toFEN();
 	
 };
 

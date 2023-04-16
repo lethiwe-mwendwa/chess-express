@@ -15,10 +15,11 @@ class King :
     bool isMoveValid(int newColumn, int newRow) override;
     bool isKillValid(int newColumn, int newRow) override;
 
-    SDL_Rect* attackZone[];
+    bool inDanger(int column, int row);
 
-    void getAttackTiles(Piece* piece) override;
-    bool inAttackZone(int newColumn, int newRow) override;
+    bool isKingMoveSafe(int newColumn, int newRow);
+
+    bool trapped();
 
 };
 

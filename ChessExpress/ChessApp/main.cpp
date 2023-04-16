@@ -12,6 +12,10 @@ using namespace std;
 
 //Temp Function
 void titleSequence(SDL_Renderer* renderer, int sWidth, int sHeight);
+void makeMove(SDL_Renderer* renderer, int x, int y);
+void startMove(SDL_Renderer* renderer, int x, int y);
+void dragPiece(SDL_Renderer* renderer, int x, int y);
+void setCheckValue(SDL_Renderer* renderer);
 
 bool titleScreen = true;
 bool gameRunning = true;
@@ -29,22 +33,33 @@ int main(int argc, char* argv[])
 
 	// At this point, the audio device is open and ready to use
 
-	// ...
+	dieA = Mix_LoadWAV("assets/die.wav");
+	moveA = Mix_LoadWAV("assets/move.wav");
+	introA = Mix_LoadWAV("assets/ChessExpress.wav");
+	startA = Mix_LoadWAV("assets/Start.wav");
+	checkA = Mix_LoadWAV("assets/checkmate.wav");
+	endGameA = Mix_LoadWAV("assets/endGame.wav");
 
 	// Clean up SDL_mixer when you're done
 	Mix_CloseAudio();
 
-	Mix_Chunk* die = Mix_LoadWAV("assets/die.wav");
-	Mix_Chunk* move = Mix_LoadWAV("assets/move.wav");
+	if (startA == NULL) {
+		printf("Failed to load start sound: %s\n", Mix_GetError());
+		return 1;
+	}
 
-	if (die == NULL) {
+	if (introA == NULL) {
+		printf("Failed to load intro sound: %s\n", Mix_GetError());
+		return 1;
+	}
+
+	if (dieA == NULL) {
 		printf("Failed to load die sound: %s\n", Mix_GetError());
 		return 1;
 	}
 
-	if (move == NULL) {
+	if (moveA == NULL) {
 		printf("Failed to load move sound: %s\n", Mix_GetError());
-		Mix_FreeChunk(die);
 		return 1;
 	}
 	//Mix_Volume(60);
@@ -58,6 +73,11 @@ int main(int argc, char* argv[])
 	SDL_FreeSurface(icon);
 
 
+	int introChannel = Mix_PlayChannel(-1, introA, 0);
+	if (introChannel == -1) {
+		printf("Failed to play die sound: %s\n", Mix_GetError());
+	}
+
 	cout << chessExpressASCII << endl;
 	titleSequence(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 	while (titleScreen) {
@@ -65,7 +85,12 @@ int main(int argc, char* argv[])
 			if (event.type == SDL_QUIT) {
 				titleScreen = false;
 				gameRunning = false;
-				break;
+				Mix_FreeChunk(dieA);
+				Mix_FreeChunk(moveA);
+				SDL_DestroyRenderer(renderer);
+				SDL_DestroyWindow(window);
+				SDL_Quit();
+				return 0;
 			}
 			if (event.type == SDL_KEYDOWN) {
 				//cout << event.key.keysym.sym << endl;
@@ -83,9 +108,19 @@ int main(int argc, char* argv[])
 	cout << "Librarys used:" << endl << "SDL2, SDL2_Mixer" << endl << endl;
 
 	//Create the board. (Make function to create the board and render pieces in default mode once FEN notation is done.
+	int startChannel = Mix_PlayChannel(-1, startA, 0);
+	if (startChannel == -1) {
+		printf("Failed to play die sound: %s\n", Mix_GetError());
+	}
+
 	Board::initBoardTextures(renderer);
 	Board::fenSplitter(currentFen);
 	Board::fenSetup(renderer, piecePlacement);
+	Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+	Board::pieceDisplay(renderer);
+	setCheckValue(renderer);
+	SDL_RenderPresent(renderer);
+	SDL_Delay(1500);
 	Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 	Board::pieceDisplay(renderer);
 	SDL_RenderPresent(renderer);
@@ -101,12 +136,15 @@ int main(int argc, char* argv[])
 	cout << enPassantTarget << endl;
 	cout << halfmoveClock << endl;
 	cout << fullmoveClock << endl << endl;
-
+	
 	// The game loop
 
 	while (gameRunning) {
 		//Uint64 start = SDL_GetPerformanceCounter();
 
+		// have menu here.
+
+		//chess game while chess running
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
 			case SDL_QUIT:
@@ -130,123 +168,22 @@ int main(int argc, char* argv[])
 
 				case SDL_BUTTON_LEFT:
 
-					//if ((findClickedRect(event.button.x, event.button.y))){
-					//The code for the drag etc goes here.
-					//This is to test that input works
-					///cout << endl << event.button.x << " " << event.button.y;
-					//SDL_SetRenderDrawColor(renderer, 10, 70, 150, 10);
-					//SDL_RenderFillRect(renderer, (findClickedRect(event.button.x, event.button.y)));
-					//SDL_RenderPresent(renderer);
-					//}
-
-
-
-					if (not(isDragging) && findClickedPiece(event.button.x, event.button.y)) {
-						clickedPiece = findClickedPiece(event.button.x, event.button.y);
-
-						//ERROR!!! in how the chess pieces are stored (fixed.)
-						//findClickedPiece(event.button.x, event.button.y)->drawPeice(renderer, 3, 3);
-						//SDL_RenderPresent(renderer);
-
-						//FIX THIS PART GOOFBALL
-						if (not(((playerTurn == 'w' and findClickedPiece(event.button.x, event.button.y)->pieceType & WHITE)) or (playerTurn == 'b' and (findClickedPiece(event.button.x, event.button.y)->pieceType & BLACK)))) {
-							break;
-						}
-						mouseRect.x = event.button.x;
-						mouseRect.y = event.button.y;
-						mouseRect.h = gameTileSize;
-						mouseRect.w = gameTileSize;
-
-						isDragging = true;
-
-					}
+					//select piece // start move
+					startMove(renderer, event.button.x, event.button.y);
+					
 					break;
 				}
 				break;
 			case SDL_MOUSEBUTTONUP:
 				if (event.button.button == SDL_BUTTON_LEFT) {
-					if (isDragging) {
-						isDragging = false;
-						SDL_RenderClear(renderer);
-						Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-						if (findClickedRect(event.button.x, event.button.y)) {
-
-							bool freeSpace = not(findClickedPiece(event.button.x, event.button.y));
-							int clickedRow;
-							int clickedColumn;
-							findClickedCords(event.button.x, event.button.y, clickedRow, clickedColumn);
-							bool validMove = false;
-							if (freeSpace) {
-								validMove = clickedPiece->isMoveValid(clickedColumn, clickedRow);
-							}
-							else {
-								validMove = clickedPiece->isKillValid(clickedColumn, clickedRow);
-							}
-
-
-							if (validMove) {
-								if (freeSpace) {
-									clickedPiece->placePiece(renderer, event.button.x, event.button.y);
-									Board::pieceDisplay(renderer);
-									Board::changeTurn(renderer);
-									int moveChannel = Mix_PlayChannel(-1, move, 0);
-									if (moveChannel == -1) {
-										printf("Failed to play move sound: %s\n", Mix_GetError());
-									}
-								}
-								else {
-									Piece* pieceInTheWay = findClickedPiece(event.button.x, event.button.y);
-									pieceInTheWay->killPeice();
-									clickedPiece->placePiece(renderer, event.button.x, event.button.y);
-									Board::pieceDisplay(renderer);
-									Board::changeTurn(renderer);
-									int dieChannel = Mix_PlayChannel(-1, die, 0);
-									if (dieChannel == -1) {
-										printf("Failed to play die sound: %s\n", Mix_GetError());
-									}
-								}
-
-								SDL_RenderPresent(renderer);
-								SDL_Delay(500);
-								Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-								//Board::pieceDisplay(renderer);
-								//SDL_RenderPresent(renderer);
-								cout << piecePlacement << endl;
-								cout << playerTurn << endl;   // check
-								cout << castlingAbility << endl;
-								cout << enPassantTarget << endl;
-								cout << halfmoveClock << endl;
-								cout << fullmoveClock << endl << endl;
-							}
-
-							
-						}
-						Board::pieceDisplay(renderer);
-						SDL_RenderPresent(renderer);
-					}
-
+					makeMove(renderer, event.button.x,event.button.y);
 
 					break;
 			case SDL_MOUSEMOTION:
-				if (isDragging) {
 
-					int mouseX = event.motion.x;
-					int mouseY = event.motion.y;
+				dragPiece(renderer, event.motion.x, event.motion.y);
 
-					//SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-					//SDL_RenderClear(renderer);
-					mouseRect.x = mouseX - gameTileSize / 2;
-					mouseRect.y = mouseY - gameTileSize / 2;
-
-					Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-					//laggy
-					Board::pieceDisplay(renderer, clickedPiece);
-					clickedPiece->drawPeice(renderer, mouseRect);
-					SDL_RenderPresent(renderer);
-
-
-				}
 				break;
 				}
 
@@ -260,8 +197,8 @@ int main(int argc, char* argv[])
 		}
 
 	}
-	Mix_FreeChunk(die);
-	Mix_FreeChunk(move);
+	Mix_FreeChunk(dieA);
+	Mix_FreeChunk(moveA);
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
@@ -344,26 +281,180 @@ void titleSequence(SDL_Renderer* renderer, int sWidth, int sHeight ){
 	SCREEN_HEIGHT = sHeight;
 }
 
-/*
-string notationWriter(){
-	int fenCount = 0;
-	for (int i = 0; i < boardSize; i++) {
-		for (int j = 0; j < boardSize; j++) {
-			if (chessBoard[i][j] == 0) {
-				fenCount += 1;
-			}
-			else{
-				switch(chessBoard[i][j]) {
-					case 12:
+void startMove(SDL_Renderer* renderer, int x, int y) {
+	if (not(isDragging) && findClickedPiece(x, y) && not checkmate) {
+		clickedPiece = findClickedPiece(x, y);
+
+		if (((playerTurn == 'w' and findClickedPiece(x, y)->pieceType & WHITE))
+			or (playerTurn == 'b' and (findClickedPiece(x, y)->pieceType & BLACK))) {
+
+			if(((check == true and (clickedPiece->pieceType & TYPE_MASK) == KING))
+				or (check != true)) {
+
+				//lift king
+				if (check == true) {
+					piecesOnBoard[clickedPiece->pieceRow][clickedPiece->pieceColumn] = NULL;
+					Board::refreshAllAttackZones();
+					piecesOnBoard[clickedPiece->pieceRow][clickedPiece->pieceColumn] = clickedPiece;
+					
 				}
+				mouseRect.x = x;
+				mouseRect.y = y;
+				mouseRect.h = gameTileSize;
+				mouseRect.w = gameTileSize;
+
+				isDragging = true;
+			}
+			else {
+				isDragging = false;
+			}
+
+			
+		}
+
+		
+
+	}
+}
+void makeMove(SDL_Renderer* renderer, int x, int y) {
+	
+	if (isDragging) {
+		isDragging = false;
+		SDL_RenderClear(renderer);
+		Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+		if (findClickedRect(x, y)) {
+			bool freeSpace = not(findClickedPiece(x, y));
+			int clickedRow;
+			int clickedColumn;
+			findClickedCords(x, y, clickedRow, clickedColumn);
+
+			bool validMove = false;
+			if (freeSpace) {
+				if ((clickedPiece->pieceType & TYPE_MASK) != KING ){
+					validMove = clickedPiece->isMoveValid(clickedColumn, clickedRow);
+				}
+				else{
+					if (playerTurn == 'w') {
+						validMove = whiteKing->isKingMoveSafe(clickedColumn, clickedRow);
+					}
+					else {
+						validMove = blackKing->isKingMoveSafe(clickedColumn, clickedRow);
+					}
+				}
+				
+			}
+			else {
+				validMove = clickedPiece->isKillValid(clickedColumn, clickedRow);
+				
+			}
+
+
+			if (validMove) {
+				if (not freeSpace) {
+					Piece* pieceInTheWay = findClickedPiece(x, y);
+					pieceInTheWay->killPeice();
+				}
+
+				clickedPiece->placePiece(renderer, x, y);
+				Board::pieceDisplay(renderer);
+				Board::changeTurn(renderer);
+				setCheckValue(renderer);
+
+				if(checkmate){
+					int checkmateChannel = Mix_PlayChannel(-1, endGameA, 0);
+					if (checkmateChannel == -1) {
+						printf("Failed to play move sound: %s\n", Mix_GetError());
+					}
+				}
+				else if (check) {
+					int checkChannel = Mix_PlayChannel(-1, checkA, 0);
+					if (checkChannel == -1) {
+						printf("Failed to play move sound: %s\n", Mix_GetError());
+					}
+				}
+				else if (freeSpace) {
+					int moveChannel = Mix_PlayChannel(-1, moveA, 0);
+					if (moveChannel == -1) {
+						printf("Failed to play move sound: %s\n", Mix_GetError());
+					}
+				}
+				else {
+					int dieChannel = Mix_PlayChannel(-1, dieA, 0);
+					if (dieChannel == -1) {
+						printf("Failed to play die sound: %s\n", Mix_GetError());
+					}
+				}
+
+				SDL_RenderPresent(renderer);
+				SDL_Delay(500);
+				Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+				Board::toFen();
+				cout << piecePlacement << endl;
+				cout << playerTurn << endl;
+				cout << castlingAbility << endl;
+				cout << enPassantTarget << endl;
+				cout << halfmoveClock << endl;
+				cout << fullmoveClock << endl << endl;
+				
 			}
 
 		}
+		Board::pieceDisplay(renderer);
+		SDL_RenderPresent(renderer);
 	}
-};
 
-void notationReader() {
-};
 
-*/
+}
+void dragPiece(SDL_Renderer* renderer, int x, int y) {
+	if (isDragging) {
 
+		int mouseX = x;
+		int mouseY = y;
+		mouseRect.x = mouseX - gameTileSize / 2;
+		mouseRect.y = mouseY - gameTileSize / 2;
+
+		Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+		Board::pieceDisplay(renderer, clickedPiece);
+		clickedPiece->drawPeice(renderer, mouseRect);
+		SDL_RenderPresent(renderer);
+
+
+	}
+}
+void setCheckValue(SDL_Renderer* renderer) {
+	Board::refreshAllAttackZones();
+	if (playerTurn == 'w') {
+		if (whiteKing->inDanger(whiteKing->pieceColumn, whiteKing->pieceRow)) {
+			if (whiteKing->trapped()) {
+				checkmate = true;
+				SDL_RenderCopy(renderer, whiteCheckMateTexture, NULL, &statusTile);
+				return;
+			}
+			SDL_RenderCopy(renderer, whiteCheckTexture, NULL, &statusTile);
+			check = true;
+			return;
+		}
+		else {
+			check = false;
+			SDL_RenderCopy(renderer, whiteTurnTexture, NULL, &statusTile);
+		}
+	}
+	else{
+		if (blackKing->inDanger(blackKing->pieceColumn, blackKing->pieceRow)) {
+			
+			if (blackKing->trapped()) {
+				checkmate = true;
+				SDL_RenderCopy(renderer, blackCheckMateTexture, NULL, &statusTile);
+				return;
+			}
+			SDL_RenderCopy(renderer, blackCheckTexture, NULL, &statusTile);
+			check = true;
+			return;
+		}
+		else {
+			check = false;
+			SDL_RenderCopy(renderer, blackTurnTexture, NULL, &statusTile);
+		}
+	}
+}

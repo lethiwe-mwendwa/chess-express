@@ -1,5 +1,6 @@
 #pragma once
 #include "SDL.h"
+#include "SDL_mixer.h"
 #include "Piece.h"
 #include "Bishop.h"
 #include "King.h"
@@ -40,13 +41,20 @@ extern const char* chessExpressASCII;
 extern const char* lethiweMwendwaASCII;
 
 
+
 extern SDL_Rect boardTiles[boardSize][boardSize];
 
 extern Piece* piecesOnBoard[boardSize][boardSize];
 
-extern Piece* whiteKing;
+extern bool check;
 
-extern Piece* blackKing;
+extern bool checkmate;
+
+extern bool isKingSelected;
+
+extern King* whiteKing;
+
+extern King* blackKing;
 
 //Fen stuff
 
@@ -59,6 +67,12 @@ extern char enPassantTarget[];
 extern char halfmoveClock[];
 extern char fullmoveClock[];
 
+extern Mix_Chunk * dieA;
+extern Mix_Chunk * moveA;
+extern Mix_Chunk * introA;
+extern Mix_Chunk * startA;
+extern Mix_Chunk * checkA;
+extern Mix_Chunk * endGameA;
 
 extern char currentFen[];
 
@@ -73,8 +87,24 @@ extern SDL_Texture* numTextures[boardSize];
 extern SDL_Texture* blackTurnTexture;
 extern SDL_Texture* whiteTurnTexture;
 
+extern SDL_Texture* blackCheckTexture;
+extern SDL_Texture* whiteCheckTexture;
+
+extern SDL_Texture* blackCheckMateTexture;
+extern SDL_Texture* whiteCheckMateTexture;
+
+
+//BLACK, WHITE.
 extern const char blackTurnPath[];
 extern const char whiteTurnPath[];
 
+extern const char blackCheckPath[];
+extern const char whiteCheckPath[];
+
+extern const char blackCheckMatePath[];
+extern const char whiteCheckMatePath[];
+
+// I will deal with you later
+extern SDL_Rect* moveSquares[];
 
 extern SDL_Rect statusTile;

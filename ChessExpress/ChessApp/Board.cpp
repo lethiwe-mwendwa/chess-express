@@ -87,11 +87,9 @@ void Board::drawBoard(SDL_Renderer* renderer, float width, float height) {
 void Board::changeTurn(SDL_Renderer * renderer) {
 	if (playerTurn == 'w') {
 		playerTurn = 'b';
-		SDL_RenderCopy(renderer, blackTurnTexture, NULL, &statusTile);
 	}
 	else {
 		playerTurn = 'w';
-		SDL_RenderCopy(renderer, whiteTurnTexture, NULL, &statusTile);
 	}
 }
 
@@ -206,14 +204,32 @@ void Board::initBoardTextures(SDL_Renderer * renderer){
 	SDL_Surface* wTurnSurface = SDL_LoadBMP(whiteTurnPath);
 	SDL_Surface* bTurnSurface = SDL_LoadBMP(blackTurnPath);
 
-	if (NULL == wTurnSurface or NULL == bTurnSurface) {
+	
+	SDL_Surface* wCheckSurface = SDL_LoadBMP(whiteCheckPath);
+	SDL_Surface* bCheckSurface = SDL_LoadBMP(blackCheckPath);
+
+	SDL_Surface* wCheckMateSurface = SDL_LoadBMP(whiteCheckMatePath);
+	SDL_Surface* bCheckMateSurface = SDL_LoadBMP(blackCheckMatePath);
+
+	if (NULL == wTurnSurface or NULL == bTurnSurface or NULL == wCheckSurface or 
+		NULL == bCheckSurface or NULL == wCheckMateSurface or NULL == bCheckMateSurface) {
 		cout << "SDL error bozo" << SDL_GetError();
 	}
 
 	whiteTurnTexture = SDL_CreateTextureFromSurface(renderer, wTurnSurface);
 	blackTurnTexture = SDL_CreateTextureFromSurface(renderer, bTurnSurface);
+	whiteCheckTexture = SDL_CreateTextureFromSurface(renderer, wCheckSurface);
+	blackCheckTexture = SDL_CreateTextureFromSurface(renderer, bCheckSurface);
+	whiteCheckMateTexture = SDL_CreateTextureFromSurface(renderer, wCheckMateSurface);
+	blackCheckMateTexture = SDL_CreateTextureFromSurface(renderer, bCheckMateSurface);
+
 	SDL_FreeSurface(wTurnSurface);
 	SDL_FreeSurface(bTurnSurface);
+	SDL_FreeSurface(wCheckSurface);
+	SDL_FreeSurface(bCheckSurface);
+	SDL_FreeSurface(wCheckMateSurface);
+	SDL_FreeSurface(bCheckMateSurface);
+	
 	
 }
 
@@ -251,111 +267,82 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 			switch (fen[i]) {
 			case('r'):
 			{
-				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | ROOK);
-				//Piece blackRook = { renderer, BLACK | ROOK , currentRow,currentColumn };
-				//piecesOnBoard[currentRow][currentColumn] = &blackRook;
 
 				piecesOnBoard[currentRow][currentColumn] = new Rook(renderer, BLACK | ROOK, currentRow, currentColumn);
-
-
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 
 			}
 				break;
 
 			case('n'):
 			{
-				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | KNIGHT);
-				//Piece blackKnight = { renderer, BLACK | KNIGHT, currentRow, currentColumn };
-				//piecesOnBoard[currentRow][currentColumn] = &blackKnight;
-
-				//cout << "piecesOnBoard one: " << piecesOnBoard[currentRow][currentColumn]->pieceType << endl;
-
-				//cout << "blackKnight one: " << blackKnight.pieceType << endl;
-
 				piecesOnBoard[currentRow][currentColumn] = new Knight(renderer, BLACK | KNIGHT, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 			}
 				break;
 			case('b'):
 				
 			{	
-				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | BISHOP);
-				//Piece blackBishop = { renderer, BLACK + BISHOP, currentRow,currentColumn }; 
-				//piecesOnBoard[currentRow][currentColumn] = &blackBishop;
 				piecesOnBoard[currentRow][currentColumn] = new Bishop(renderer, BLACK + BISHOP, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 			}
 				break;
 			case('q'):
-			{
-				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | QUEEN);
-				//Piece blackQueen = { renderer, BLACK + QUEEN, currentRow,currentColumn };
-				//piecesOnBoard[currentRow][currentColumn] = &blackQueen;
+			{				
 				piecesOnBoard[currentRow][currentColumn] = new Queen(renderer, BLACK + QUEEN, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 			}
 				break;
 			case('k'): 
 			{
-				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | KING);
-				//Piece blackKing = { renderer, BLACK + KING, currentRow,currentColumn };
-				//piecesOnBoard[currentRow][currentColumn] = &blackKing;
 				piecesOnBoard[currentRow][currentColumn] = new King(renderer, BLACK + KING, currentRow, currentColumn);
-				blackKing = piecesOnBoard[currentRow][currentColumn];
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				blackKing = dynamic_cast<King*>(piecesOnBoard[currentRow][currentColumn]);
+				
+
 			}
 				break;
 			case('p'):
 			{
-				//Piece::drawPeice(renderer, currentRow, currentColumn, BLACK | PAWN);
-				//Piece blackPawn = { renderer, BLACK + PAWN, currentRow,currentColumn };
-				//piecesOnBoard[currentRow][currentColumn] = &blackPawn;
 				piecesOnBoard[currentRow][currentColumn] = new Pawn(renderer, BLACK + PAWN, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 			}
 				break;
 			case('R'):
 			{
-				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | ROOK);
-				//Piece whiteRook = { renderer, WHITE + ROOK, currentRow,currentColumn };
-				//piecesOnBoard[currentRow][currentColumn] = &whiteRook;
 				piecesOnBoard[currentRow][currentColumn] = new Rook(renderer, WHITE + ROOK, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 			}
 				break;
 			case('N'):
 			{
-				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | KNIGHT);
-				//Piece whiteKnight = { renderer, WHITE + KNIGHT, currentRow,currentColumn };
-				//piecesOnBoard[currentRow][currentColumn] = &whiteKnight;
 				piecesOnBoard[currentRow][currentColumn] = new Knight(renderer, WHITE + KNIGHT, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 			}
 				break;
 			case('B'):
 			{
-				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | BISHOP);
-				//Piece whiteBishop = { renderer, WHITE + BISHOP, currentRow,currentColumn };
-				//piecesOnBoard[currentRow][currentColumn] = &whiteBishop;
 				piecesOnBoard[currentRow][currentColumn] = new Bishop(renderer, WHITE + BISHOP, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 			}
 				break;
 			case('Q'):
 			{
-				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | QUEEN);
-				//Piece whiteQueen = { renderer, WHITE + QUEEN, currentRow,currentColumn };
-				//piecesOnBoard[currentRow][currentColumn] = &whiteQueen;
 				piecesOnBoard[currentRow][currentColumn] = new Queen(renderer, WHITE + QUEEN, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 			}
 				break;
 			case('K'):
 			{
-				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | KING);
-				//Piece whiteKing = { renderer, WHITE + KING, currentRow,currentColumn };
-				//piecesOnBoard[currentRow][currentColumn] = &whiteKing;
 				piecesOnBoard[currentRow][currentColumn] = new King(renderer, WHITE + KING, currentRow, currentColumn);
-				whiteKing = piecesOnBoard[currentRow][currentColumn];
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				whiteKing = dynamic_cast<King*>( piecesOnBoard[currentRow][currentColumn]);
 			}
 				break;
 			case('P'):
 			{
-				//Piece::drawPeice(renderer, currentRow, currentColumn, WHITE | PAWN);
-				//Piece whitePawn = { renderer, WHITE + PAWN, currentRow,currentColumn };
-				//piecesOnBoard[currentRow][currentColumn] = &whitePawn;
 				piecesOnBoard[currentRow][currentColumn] = new Pawn(renderer, WHITE + PAWN, currentRow, currentColumn);
+				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 			}
 				break;
 			}
@@ -366,6 +353,50 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 
 }
 
+void Board::refreshAllAttackZones() {
+	for (int i = 0; i < boardSize; i++) {
+		for (int j = 0; j < boardSize; j++) {
+			if (piecesOnBoard[i][j]) {
+				piecesOnBoard[i][j]->getAttackTiles();
+			}
+		}
+	}
+}
 
+void Board::toFen(){
+	int charCount = 0;
+	
+	for (int i = 0; i < 64; i++) {
+		if (piecePlacement[i]) {
+			piecePlacement[i] = '\0';
+		}
+		
+	}
+
+	// Traverse the board and build FEN string
+	for (int i = 0; i < boardSize; i++) {
+		int emptyCount = 0;
+		for (int j = 0; j < boardSize; j++) {
+			Piece* piece = piecesOnBoard[i][j];
+			if (piece) {
+				if (emptyCount > 0) {
+					piecePlacement[charCount++] += static_cast<char>(emptyCount + '0');
+					emptyCount = 0;
+				}
+				piecePlacement[charCount++] += piece->toFEN();
+				
+			}
+			else {
+				emptyCount++;
+			}
+		}
+		if (emptyCount > 0) {
+			piecePlacement[charCount++] += static_cast<char>(emptyCount + '0');
+		}
+		if (i < boardSize - 1) {
+			piecePlacement[charCount++] += '/';
+		}
+	}
+}
 
 //bool Board::castleAbility()
