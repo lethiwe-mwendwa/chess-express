@@ -1,8 +1,13 @@
-#include "Game.h"
-#include "Inputs.h"
-#include <iostream>
-#include "Board.h"
-using namespace std;
+#pragma once
+#include "Constants.h"
+
+struct Move {
+	int startRow;
+	int startColumn;
+	int endRow;
+	int endColumn;
+};
+
 
 SDL_Rect getRectFromImage(int sWidth, int sHeight, SDL_Surface* imageSurface, float widthMult, float heightMult) {
 	int imageWidth = imageSurface->w;
@@ -24,10 +29,8 @@ SDL_Rect getRectFromImage(int sWidth, int sHeight, SDL_Surface* imageSurface, fl
 	return rect;
 }
 
-
 void initChessGame(SDL_Renderer* renderer) {
-	cout << lethiweMwendwaASCII << endl;
-	cout << "Librarys used:" << endl << "SDL2, SDL2_Mixer" << endl << endl;
+	
 
 	//Create the board. (Make function to create the board and render pieces in default mode once FEN notation is done.
 	int startChannel = Mix_PlayChannel(-1, startA, 0);
@@ -74,9 +77,9 @@ void menuSequence(SDL_Renderer* renderer, int sWidth, int sHeight) {
 	}
 
 	SDL_Texture * imageTexture = SDL_CreateTextureFromSurface(renderer, imageSurface);
-	SDL_FreeSurface(imageSurface);
 
 	SDL_Rect menuRect = getRectFromImage(SCREEN_WIDTH, SCREEN_HEIGHT, imageSurface, 0.8, 0.8);
+	SDL_FreeSurface(imageSurface);
 
 	SDL_RenderCopy(renderer, imageTexture, NULL, &menuRect);
 	SDL_DestroyTexture(imageTexture);
@@ -157,6 +160,7 @@ void titleSequence(SDL_Renderer* renderer, int sWidth, int sHeight) {
 	SCREEN_WIDTH = sWidth;
 	SCREEN_HEIGHT = sHeight;
 }
+
 void startMove(SDL_Renderer* renderer, int x, int y) {
 	if (not(isDragging) && findClickedPiece(x, y) && not checkmate) {
 		clickedPiece = findClickedPiece(x, y);
@@ -187,6 +191,8 @@ void startMove(SDL_Renderer* renderer, int x, int y) {
 }
 
 void makeMove(SDL_Renderer* renderer, int x, int y) {
+
+	Move move{};
 
 	if (isDragging) {
 		isDragging = false;
@@ -222,6 +228,9 @@ void makeMove(SDL_Renderer* renderer, int x, int y) {
 
 			}
 
+			move.startColumn = clickedPiece->pieceColumn;
+			move.startRow = clickedPiece->pieceRow;
+
 
 			if (validMove) {
 				if (not freeSpace) {
@@ -230,6 +239,14 @@ void makeMove(SDL_Renderer* renderer, int x, int y) {
 				}
 
 				clickedPiece->placePiece(x, y);
+				move.endColumn = clickedPiece->pieceColumn;
+				move.endRow = clickedPiece->pieceRow;
+
+				SDL_SetRenderDrawColor(renderer, 130, 104, 137, 255);
+				SDL_RenderFillRect(renderer, &boardTiles[move.startRow][move.startColumn]);
+				SDL_SetRenderDrawColor(renderer, 136, 136, 187, 255);
+				SDL_RenderFillRect(renderer, &boardTiles[move.endRow][move.endColumn]);
+
 				clickedPiece->drawPiece(renderer, *clickedPiece->pieceRect);
 				Board::pieceDisplay(renderer);
 				Board::changeTurn(renderer);
@@ -266,13 +283,14 @@ void makeMove(SDL_Renderer* renderer, int x, int y) {
 				SDL_RenderPresent(renderer);
 				SDL_Delay(500);
 				Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+				SDL_SetRenderDrawColor(renderer, 130, 104, 137, 255);
+				SDL_RenderFillRect(renderer, &boardTiles[move.startRow][move.startColumn]);
+				SDL_SetRenderDrawColor(renderer, 136, 136, 187, 255);
+				SDL_RenderFillRect(renderer, &boardTiles[move.endRow][move.endColumn]);
 				Board::toFen();
-				cout << piecePlacement << endl;
-				cout << playerTurn << endl;
-				cout << castlingAbility << endl;
-				cout << enPassantTarget << endl;
-				cout << halfmoveClock << endl;
-				cout << fullmoveClock << endl << endl;
+
+				cout << "Piece Placement: " << piecePlacement << endl;
+				cout << "Player Turn: " << playerTurn << endl << endl;
 
 			}
 
@@ -343,4 +361,15 @@ void setCheckValue(SDL_Renderer* renderer) {
 	}
 }
 
-
+void appDeconstructor(SDL_Renderer* renderer, SDL_Window* window) {
+	Board::destroyLeftPieces();
+	Mix_FreeChunk(dieA);
+	Mix_FreeChunk(moveA);
+	Mix_FreeChunk(introA);
+	Mix_FreeChunk(startA);
+	Mix_FreeChunk(endGameA);
+	Mix_FreeChunk(checkA);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+}

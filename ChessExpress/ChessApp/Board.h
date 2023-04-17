@@ -1,5 +1,4 @@
 #pragma once
-#include "SDL.h"
 #include "Constants.h"
 
 class Board
@@ -16,6 +15,8 @@ public:
 
 	static bool noPiecesCanUncheck();
 
+	static void destroyLeftPieces();
+
 	static void pieceDisplay(SDL_Renderer* renderer, Piece* selectedPiece = NULL);
 
 	static void initBoardTextures(SDL_Renderer* renderer);
@@ -23,7 +24,6 @@ public:
 	static void chessNumDisplay(SDL_Renderer* renderer,int row);
 	static void chessLetterDisplay(SDL_Renderer* renderer, int column);
 
-	//static void drawBoard2(SDL_Renderer* renderer, float width, float height, Piece* selectedPiece = NULL);
 	static void fenSplitter(char fen[]);
 
 	static Pawn * lastPawnMoved;

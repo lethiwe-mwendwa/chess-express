@@ -1,31 +1,19 @@
-#include "SDL.h"
 #include "Constants.h"
-#include "Board.h"
-#include "Piece.h"
-#include <iostream>
-#include <algorithm>
-#include "Inputs.h"
-#include "SDL_mixer.h"
-#include "King.h"
-#include "Game.h"
-using namespace std;
-
-bool titleScreen = true;
-bool gameRunning = true;
 
 int main(int argc, char* argv[])
 {
+
+	//Initializing the libs
 	SDL_Init(SDL_INIT_EVERYTHING);
 	Mix_Init(0);
 	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024);
-	// Initialize SDL_mixer
+	
 	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) == -1) {
 		printf("Failed to initialize SDL_mixer: %s\n", Mix_GetError());
 		return 1;
 	}
 
-	// At this point, the audio device is open and ready to use
-
+	// Audio Device Ready to use
 	dieA = Mix_LoadWAV("assets/die.wav");
 	moveA = Mix_LoadWAV("assets/move.wav");
 	introA = Mix_LoadWAV("assets/ChessExpress.wav");
@@ -40,22 +28,18 @@ int main(int argc, char* argv[])
 		printf("Failed to load start sound: %s\n", Mix_GetError());
 		return 1;
 	}
-
 	if (introA == NULL) {
 		printf("Failed to load intro sound: %s\n", Mix_GetError());
 		return 1;
 	}
-
 	if (dieA == NULL) {
 		printf("Failed to load die sound: %s\n", Mix_GetError());
 		return 1;
 	}
-
 	if (moveA == NULL) {
 		printf("Failed to load move sound: %s\n", Mix_GetError());
 		return 1;
 	}
-	//Mix_Volume(60);
 
 	//Window and Renderer creation
 	SDL_Window* window = SDL_CreateWindow("Chess Express", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -65,31 +49,25 @@ int main(int argc, char* argv[])
 	SDL_SetWindowIcon(window, icon);
 	SDL_FreeSurface(icon);
 
-
-	int introChannel = Mix_PlayChannel(-1, introA, 0);
-	if (introChannel == -1) {
-		printf("Failed to play die sound: %s\n", Mix_GetError());
+	// The title Screen Before the game
+	// Outside of gamerunning since it will only ever run once.
+	if (titleScreen) {
+		int introChannel = Mix_PlayChannel(-1, introA, 0);
+		if (introChannel == -1) {
+			printf("Failed to play sound: %s\n", Mix_GetError());
+		}
+		cout << chessExpressASCII << endl;
+		titleSequence(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 	}
-
-	cout << chessExpressASCII << endl;
-	titleSequence(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 	while (titleScreen) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
 				titleScreen = false;
-				gameRunning = false;
-				Mix_FreeChunk(dieA);
-				Mix_FreeChunk(moveA);
-				SDL_DestroyRenderer(renderer);
-				SDL_DestroyWindow(window);
-				SDL_Quit();
-				return 0;
 			}
 			if (event.type == SDL_KEYDOWN) {
-				//cout << event.key.keysym.sym << endl;
 				if (event.key.keysym.sym == SDLK_RETURN) {
-
 					titleScreen = false;
+					gameRunning = true;
 					menu = true;
 				}
 			}
@@ -99,13 +77,88 @@ int main(int argc, char* argv[])
 		}
 	}
 	
-	
-	// The game loop
+	// The main game loop
+	// Here we switch between Menu, Chessstarted, and Checkmate.
+	if (gameRunning) {
+		cout << lethiweMwendwaASCII << endl;
+		cout << "Librarys used:" << endl << "SDL2, SDL2_Mixer" << endl << endl;
+	}
 	while (gameRunning) {
-		//Uint64 start = SDL_GetPerformanceCounter();
 
+		// Menu State: Player gets to input FEN
+		// Ends once valid inputs are given
 		if (menu) {
 			menuSequence(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+			cout << "-----------------------------" << endl;
+			cout <<menuASCII<< endl << endl;
+			int userSelect;
+			bool selected = false;
+			while (not selected) {
+				cout << "-----------------------------" << endl;
+				cout << "What do you want to do?" << endl << endl;
+				cout << "Type \"1\" to Load Default Fen" << endl;
+				cout << "Type \"2\" to Load User Fen" << endl;
+				cout << "Type \"3\" to Quit Game" << endl;
+				cout << "-----------------------------" << endl;
+				cout << "Input: ";
+				cin >> userSelect;
+				if (userSelect == 1) {
+					selected = true;
+					ifstream file_in(defaultFenPath);
+					if (file_in.is_open()) {
+						file_in.getline(currentFen, MAX_FEN);
+						file_in.close();
+
+						cout << endl << "Your loaded Fen: " << currentFen <<endl << endl;
+						selected = true;
+					}
+					else {
+						cout << "Error: Unable to open file" << endl;
+						cout << "Start again from the beginning." << endl;
+						selected = false;
+					}
+				}
+				else if (userSelect == 2) {
+					cout << "Please input path for FEN notation (e.g, gamefiles/test1.txt or gamefiles/test2.txt" << endl << endl;
+					const int MAX_SIZE = 100;
+					char filePath[MAX_SIZE];
+
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					cout << "File path: ";
+					cin.getline(filePath, MAX_SIZE);
+
+					ifstream file_in(filePath);
+					if (file_in.is_open()) {
+						file_in.getline(currentFen, MAX_FEN);
+						file_in.close();
+
+						cout << endl << "Your loaded Fen: " << currentFen << endl << endl;
+						selected = true;
+					}
+					else {
+						cout << "Error: Unable to open file" << endl;
+						cout << "Start again from the beginning." << endl;
+						selected = false;
+					}
+				}
+				else if (userSelect == 3) {
+					selected = true;
+					menu = false;
+					gameRunning = false;
+					Mix_FreeChunk(dieA);
+					Mix_FreeChunk(moveA);
+					SDL_DestroyRenderer(renderer);
+					SDL_DestroyWindow(window);
+					SDL_Quit();
+					return 0;
+				}
+				else {
+					cout << "INVALID INPUT" << endl;
+					selected = false;
+				}
+			}
+			cout << "Press Enter in the main window to start the game :D" << endl << endl;
+
 		}
 		while (menu) {
 			while (SDL_PollEvent(&event)) {
@@ -133,39 +186,8 @@ int main(int argc, char* argv[])
 			}
 		}
 		
-		if (checkmate) {
-			cout << "-----------------------------" << endl;
-			cout << "Press Enter to go back to Menu" << endl;
-		}
-		while (checkmate) {
-			
-			while (SDL_PollEvent(&event)) {
-				if(event.type == SDL_QUIT){
-					checkmate = false;
-					gameRunning = false;
-					Mix_FreeChunk(dieA);
-					Mix_FreeChunk(moveA);
-					SDL_DestroyRenderer(renderer);
-					SDL_DestroyWindow(window);
-					SDL_Quit();
-					return 0;
-				}
-				if (event.type == SDL_KEYDOWN) {
-					if (event.key.keysym.sym == SDLK_RETURN) {
-						checkmate = false;
-						menu = true;
-					}
-				}
-				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-					Board::drawBoard(renderer, event.window.data1, event.window.data2);
-					Board::pieceDisplay(renderer);
-					setCheckValue(renderer);
-					SDL_RenderPresent(renderer);
-				}
-			}
-
-		}
-
+		// Chess State: Chess game is on going
+		// Game goes on untill checkmate happens
 		if (chessStarted) {
 			initChessGame(renderer);
 		}
@@ -173,6 +195,7 @@ int main(int argc, char* argv[])
 			while (SDL_PollEvent(&event)) {
 				switch (event.type) {
 				case SDL_QUIT:
+					chessStarted = false;
 					gameRunning = false;
 
 					break;
@@ -214,13 +237,46 @@ int main(int argc, char* argv[])
 				}
 			}
 		}
+
+		// Checkmate State: Displays Game Over screen untill
+		// Player Presses "Enter" to go back to the menu
+		if (checkmate) {
+			cout << "-----------------------------" << endl;
+			cout << "Press Enter to go back to Menu" << endl;
+			cout << "-----------------------------" << endl;
+		}
+		while (checkmate) {
+
+			while (SDL_PollEvent(&event)) {
+				if (event.type == SDL_QUIT) {
+					checkmate = false;
+					gameRunning = false;
+					Mix_FreeChunk(dieA);
+					Mix_FreeChunk(moveA);
+					SDL_DestroyRenderer(renderer);
+					SDL_DestroyWindow(window);
+					SDL_Quit();
+					return 0;
+				}
+				if (event.type == SDL_KEYDOWN) {
+					if (event.key.keysym.sym == SDLK_RETURN) {
+						checkmate = false;
+						menu = true;
+						Board::destroyLeftPieces();
+					}
+				}
+				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+					Board::drawBoard(renderer, event.window.data1, event.window.data2);
+					Board::pieceDisplay(renderer);
+					setCheckValue(renderer);
+					SDL_RenderPresent(renderer);
+				}
+			}
+
+		}
+
 	}
-	Mix_FreeChunk(dieA);
-	Mix_FreeChunk(moveA);
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
+	appDeconstructor(renderer, window);
+	
 	return 0;
 }
-
-

@@ -1,5 +1,5 @@
+#pragma once
 #include "Constants.h"
-
 
 int SCREEN_WIDTH = 900;
 int SCREEN_HEIGHT = 720;
@@ -74,10 +74,11 @@ bool check = false;
 bool checkmate = false;
 bool menu = false;
 bool chessStarted = false;
+bool titleScreen = true;
+bool gameRunning = false;
 
 
 King* whiteKing = new King(NULL, NULL, NULL, NULL);
-
 King* blackKing = new King(NULL, NULL, NULL, NULL);
 
 
@@ -87,10 +88,9 @@ SDL_Texture* numTextures[boardSize];
 const char titleImagePath[] = "assets/ChessXpress.bmp";
 const char pressEnterImagePath[] = "assets/pressEnter.bmp";
 const char menuImagePath[] = "assets/instructions.bmp";
+extern const char defaultFenPath[] = "gamefiles/default.txt";
 
-const char startingFen[] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-char currentFen[] = "rnbqk1nr/1ppp1ppp/p7/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 0 1";
+char currentFen[MAX_FEN] = "rnbqk1nr/1ppp1ppp/p7/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 0 1";
 
 char piecePlacement[64] = { 0 };
 char playerTurn = '-';
@@ -158,3 +158,14 @@ const char* lethiweMwendwaASCII = R"(
                                                                                       
 )";
 
+const char* menuASCII = R"(
+                          
+  __  __                  
+ |  \/  |                 
+ | \  / | ___ _ __  _   _ 
+ | |\/| |/ _ \ '_ \| | | |
+ | |  | |  __/ | | | |_| |
+ |_|  |_|\___|_| |_|\__,_|
+                          
+                          
+)";

@@ -1,6 +1,19 @@
-﻿  main.cpp
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(160,65): warning C4244: 'argument': conversion from 'Sint32' to 'float', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(160,45): warning C4244: 'argument': conversion from 'Sint32' to 'float', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(182,66): warning C4244: 'argument': conversion from 'Sint32' to 'float', possible loss of data
-E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\main.cpp(182,46): warning C4244: 'argument': conversion from 'Sint32' to 'float', possible loss of data
+﻿  Game.cpp
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(18,19): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(22,20): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(44,43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(44,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(49,43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(49,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(81,90): warning C4305: 'argument': truncation from 'double' to 'float'
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(113,24): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(118,25): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(142,24): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(147,25): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(200,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(200,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(285,46): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(285,32): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(312,44): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\ChessApp\Game.cpp(312,30): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   ChessApp.vcxproj -> E:\[Code]\NTUCoursework\C++\Chess\chess-express\ChessExpress\x64\Debug\ChessApp.exe

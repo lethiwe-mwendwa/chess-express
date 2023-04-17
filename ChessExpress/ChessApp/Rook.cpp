@@ -1,7 +1,4 @@
-#include "Rook.h"
 #include "Constants.h"
-#include <iostream>
-using namespace std;
 
 bool Rook::isMoveValid(int newColumn, int newRow)
 {

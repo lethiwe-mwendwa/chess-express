@@ -1,13 +1,6 @@
 #pragma once
-#include "SDL.h"
-#include "Piece.h"
 #include "Constants.h"
-#include <iostream>
-#include "Inputs.h"
-#include "Board.h"
-#include "Game.h"
 
-using namespace std;
 
 Piece::Piece(SDL_Renderer* renderer,int type, int row, int column) {
 	this->pieceType = type;
@@ -17,6 +10,7 @@ Piece::Piece(SDL_Renderer* renderer,int type, int row, int column) {
 	this->pieceColumn = column;
 	this->pieceRect = &boardTiles[row][column];
 	this->pieceSurface = NULL;
+	this->pieceTrackerPosition = NULL;
 
 	pieceSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
 
@@ -71,13 +65,15 @@ void Piece::killPiece()
 	piecesOnBoard[this->pieceRow][this->pieceColumn] = NULL;
 	SDL_DestroyTexture(this->pieceTexture);
 
-	if (playerTurn == 'w'){
+	if (playerTurn == 'w') {
 		numOfBlackPieces = numOfBlackPieces - 1;
-	} 
-	else{
-		numOfWhitePieces = numOfWhitePieces - 1;
+		blackPieces[this->pieceTrackerPosition] = NULL;
 	}
-
+	else {
+		numOfWhitePieces = numOfWhitePieces - 1;
+		whitePieces[this->pieceTrackerPosition] = NULL;
+	}
+	
 	delete this;
 }
 
@@ -151,40 +147,41 @@ void Piece::clearAttackTiles() {
 	this->numAttackTiles = 0;
 }
 
-bool Piece::moveUnchecks(int newColumn, int newRow, Piece* pieceInTheWay){
-
+bool Piece::moveUnchecks(int newColumn, int newRow, Piece* pieceInTheWay) {
 	bool checkTemp = check;
 	SDL_Renderer* nullRenderer = NULL;
-	Piece* pieceTemp = pieceInTheWay;
+	Piece* originalPiece = piecesOnBoard[newRow][newColumn];
 
-	//simulate the move
+	// simulate the move
 	int oldRow = this->pieceRow;
 	int oldColumn = this->pieceColumn;
 
 	piecesOnBoard[newRow][newColumn] = this;
 	piecesOnBoard[oldRow][oldColumn] = NULL;
+
 	setCheckValue(nullRenderer);
-	
-	// undo move
-	piecesOnBoard[oldRow][oldColumn] = this;
-	if (pieceInTheWay) {
-		piecesOnBoard[oldRow][oldColumn] = pieceTemp;
-	}
-	piecesOnBoard[newRow][newColumn] = NULL;
-	Board::refreshAllAttackZones();
-	
-	//check if move unchecks king
+
+	// check if move unchecks king
 	if (check) {
-		check = checkTemp;
+		piecesOnBoard[oldRow][oldColumn] = this;
+		piecesOnBoard[newRow][newColumn] = originalPiece;
+		Board::refreshAllAttackZones();
 		return false;
 	}
-	else {
-		check = checkTemp;
-		return true;
-	}
-	
 
+	// undo move
+	piecesOnBoard[oldRow][oldColumn] = this;
+	piecesOnBoard[newRow][newColumn] = originalPiece;
+
+	if (pieceInTheWay) {
+		piecesOnBoard[oldRow][oldColumn] = pieceInTheWay;
+	}
+
+	Board::refreshAllAttackZones();
+	check = checkTemp;
+	return true;
 }
+
 
 char Piece::toFEN() {
 	if (this->pieceType & BLACK) {

@@ -1,7 +1,4 @@
-#include "Pawn.h"
 #include "Constants.h"
-#include <iostream>
-using namespace std;
 
 bool Pawn::isMoveValid(int newColumn, int newRow)
 {

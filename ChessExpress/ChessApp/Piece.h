@@ -7,6 +7,7 @@ public:
 	Piece(SDL_Renderer* renderer, int type, int row, int column);
 
 	int pieceType;
+	int pieceTrackerPosition;
 	int pieceRow;
 	int pieceColumn;
 	bool pieceAlive;
@@ -41,6 +42,6 @@ public:
 	int numAttackTiles = 0;
 
 	char toFEN();
+private:
 	
 };
-

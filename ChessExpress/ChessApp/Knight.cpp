@@ -1,4 +1,3 @@
-#include "Knight.h"
 #include "Constants.h"
 
 bool Knight::isKillValid(int newColumn, int newRow)

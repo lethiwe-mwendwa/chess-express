@@ -1,8 +1,4 @@
-#include "Board.h"
 #include "Constants.h"
-#include <iostream>
-using namespace std;
-
 
 Board::Board()
 {
@@ -275,7 +271,11 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Rook(renderer, BLACK | ROOK, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
-				numOfBlackPieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfBlackPieces;
+				//blackPieces[numOfBlackPieces++] = piecesOnBoard[currentRow][currentColumn];
+				
 
 			}
 				break;
@@ -284,7 +284,11 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Knight(renderer, BLACK | KNIGHT, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
-				numOfBlackPieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfBlackPieces;
+				//blackPieces[numOfBlackPieces++] = piecesOnBoard[currentRow][currentColumn];
+				
 			}
 				break;
 			case('b'):
@@ -292,14 +296,22 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 			{	
 				piecesOnBoard[currentRow][currentColumn] = new Bishop(renderer, BLACK + BISHOP, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
-				numOfBlackPieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfBlackPieces;
+				//blackPieces[numOfBlackPieces++] = piecesOnBoard[currentRow][currentColumn];
+				
 			}
 				break;
 			case('q'):
 			{				
 				piecesOnBoard[currentRow][currentColumn] = new Queen(renderer, BLACK + QUEEN, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
-				numOfBlackPieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfBlackPieces;
+				//blackPieces[numOfBlackPieces++] = piecesOnBoard[currentRow][currentColumn];
+				
 			}
 				break;
 			case('k'): 
@@ -307,7 +319,11 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				piecesOnBoard[currentRow][currentColumn] = new King(renderer, BLACK + KING, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 				blackKing = dynamic_cast<King*>(piecesOnBoard[currentRow][currentColumn]);
-				numOfBlackPieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfBlackPieces;
+				//blackPieces[numOfBlackPieces++] = piecesOnBoard[currentRow][currentColumn];
+				
 
 			}
 				break;
@@ -315,35 +331,53 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Pawn(renderer, BLACK + PAWN, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
-				numOfWhitePieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfBlackPieces;
+				//blackPieces[numOfBlackPieces++] = piecesOnBoard[currentRow][currentColumn];
+				
 			}
 				break;
 			case('R'):
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Rook(renderer, WHITE + ROOK, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
-				numOfWhitePieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfWhitePieces;
+				//whitePieces[numOfWhitePieces++] = piecesOnBoard[currentRow][currentColumn];
+				
 			}
 				break;
 			case('N'):
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Knight(renderer, WHITE + KNIGHT, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
-				numOfWhitePieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfWhitePieces;
+				//whitePieces[numOfWhitePieces++] = piecesOnBoard[currentRow][currentColumn];
+				
 			}
 				break;
 			case('B'):
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Bishop(renderer, WHITE + BISHOP, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
-				numOfWhitePieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfWhitePieces;
+				//whitePieces[numOfWhitePieces++] = piecesOnBoard[currentRow][currentColumn];
 			}
 				break;
 			case('Q'):
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Queen(renderer, WHITE + QUEEN, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
-				numOfWhitePieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfWhitePieces;
+				//whitePieces[numOfWhitePieces++] = piecesOnBoard[currentRow][currentColumn];
 			}
 				break;
 			case('K'):
@@ -351,14 +385,20 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				piecesOnBoard[currentRow][currentColumn] = new King(renderer, WHITE + KING, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 				whiteKing = dynamic_cast<King*>( piecesOnBoard[currentRow][currentColumn]);
-				numOfWhitePieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfWhitePieces;
+				//whitePieces[numOfWhitePieces++] = piecesOnBoard[currentRow][currentColumn];
 			}
 				break;
 			case('P'):
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Pawn(renderer, WHITE + PAWN, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
-				numOfWhitePieces++;
+				//    Scrapped functionality due to stack overflow caused by a later function
+				//    So it's needless to append these pieces
+				//piecesOnBoard[currentRow][currentColumn]->pieceTrackerPosition = numOfWhitePieces;
+				//whitePieces[numOfWhitePieces++] = piecesOnBoard[currentRow][currentColumn];
 			}
 				break;
 			}
@@ -416,11 +456,13 @@ void Board::toFen(){
 }
 
 bool Board::noPiecesCanUncheck() {
-	int turn = (playerTurn == 'w') ? WHITE : BLACK;
+	// Scrapped this due to stack overflow issue. Sadly not enough time to optimize
+	return true;
+
 	int num;
 	Piece** pieces;
 
-	if (turn == WHITE) {
+	if (playerTurn == 'w') {
 		pieces = whitePieces;
 		num = numOfWhitePieces;
 	}
@@ -451,7 +493,12 @@ bool Board::noPiecesCanUncheck() {
 	return true;
 }
 
-
-
-
-//bool Board::castleAbility()
+void Board::destroyLeftPieces() {
+	for (int i = 0; i < boardSize; i++) {
+		for (int j = 0; j < boardSize; j++) {
+			if (piecesOnBoard[i][j]) {
+				piecesOnBoard[i][j]->killPiece();
+			}
+		}
+	}
+}

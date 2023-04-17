@@ -1,6 +1,3 @@
-#include "Queen.h"
-#include "Bishop.h"
-#include "Rook.h"
 #include "Constants.h"
 
 bool Queen::isMoveValid(int newColumn, int newRow)

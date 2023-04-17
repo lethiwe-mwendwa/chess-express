@@ -1,13 +1,8 @@
 #pragma once
-#include "SDL.h"
 #include "Constants.h"
-#include <iostream>
-#include "Inputs.h"
-using namespace std;
+
 
 SDL_Rect *findClickedRect(int x, int y) {
-
-
 	int row;
 	int column;
 
