@@ -90,6 +90,7 @@ int main(int argc, char* argv[])
 				if (event.key.keysym.sym == SDLK_RETURN) {
 
 					titleScreen = false;
+					menu = true;
 				}
 			}
 			if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
@@ -97,111 +98,122 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
-	cout << lethiweMwendwaASCII << endl ;
-	cout << "Librarys used:" << endl << "SDL2, SDL2_Mixer" << endl << endl;
-
-	//Create the board. (Make function to create the board and render pieces in default mode once FEN notation is done.
-	int startChannel = Mix_PlayChannel(-1, startA, 0);
-	if (startChannel == -1) {
-		printf("Failed to play die sound: %s\n", Mix_GetError());
-	}
-
-	Board::initBoardTextures(renderer);
-	Board::fenSplitter(currentFen);
-	Board::fenSetup(renderer, piecePlacement);
-	Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-	Board::pieceDisplay(renderer);
-	setCheckValue(renderer);
-	SDL_RenderPresent(renderer);
-	SDL_Delay(1500);
-	Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-	Board::pieceDisplay(renderer);
-	SDL_RenderPresent(renderer);
-
-	//SDL_UpdateWindowSurface(window);  (Dont remember what this was about. Read up on what this does)
-
-	//Temporary testing:
-	//test code
-
-	cout << piecePlacement << endl;
-	cout << playerTurn << endl;
-	cout << castlingAbility << endl;
-	cout << enPassantTarget << endl;
-	cout << halfmoveClock << endl;
-	cout << fullmoveClock << endl << endl;
+	
 	
 	// The game loop
-
 	while (gameRunning) {
 		//Uint64 start = SDL_GetPerformanceCounter();
 
-		// have menu here.
+		if (menu) {
+			menuSequence(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+		}
+		while (menu) {
+			while (SDL_PollEvent(&event)) {
+				if (event.type == SDL_QUIT) {
+					titleScreen = false;
+					gameRunning = false;
+					Mix_FreeChunk(dieA);
+					Mix_FreeChunk(moveA);
+					SDL_DestroyRenderer(renderer);
+					SDL_DestroyWindow(window);
+					SDL_Quit();
+					return 0;
+				}
+				if (event.type == SDL_KEYDOWN) {
+					if (event.key.keysym.sym == SDLK_RETURN) {
 
-		//chess game while chess running
-		while (SDL_PollEvent(&event)) {
-			switch (event.type) {
-			case SDL_QUIT:
-				gameRunning = false;
-
-				break;
-			case SDL_WINDOWEVENT:
+						menu = false;
+						chessStarted = true;
+					}
+				}
 				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
-					//Chess thing lol /*
+					menuSequence(renderer, event.window.data1, event.window.data2);
+					SDL_RenderPresent(renderer);
+				}
+			}
+		}
+		
+		if (checkmate) {
+			cout << "-----------------------------" << endl;
+			cout << "Press Enter to go back to Menu" << endl;
+		}
+		while (checkmate) {
+			
+			while (SDL_PollEvent(&event)) {
+				if(event.type == SDL_QUIT){
+					checkmate = false;
+					gameRunning = false;
+					Mix_FreeChunk(dieA);
+					Mix_FreeChunk(moveA);
+					SDL_DestroyRenderer(renderer);
+					SDL_DestroyWindow(window);
+					SDL_Quit();
+					return 0;
+				}
+				if (event.type == SDL_KEYDOWN) {
+					if (event.key.keysym.sym == SDLK_RETURN) {
+						checkmate = false;
+						menu = true;
+					}
+				}
+				if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
 					Board::drawBoard(renderer, event.window.data1, event.window.data2);
 					Board::pieceDisplay(renderer);
+					setCheckValue(renderer);
 					SDL_RenderPresent(renderer);
-
-					//make a function that displays the current board shape. make a fen notation val called "current", 
-					//and every time it resizes it redraws from looking at it
 				}
+			}
 
-				break;
-			case SDL_MOUSEBUTTONDOWN:
-				switch (event.button.button) {
+		}
 
-				case SDL_BUTTON_LEFT:
-
-					//select piece // start move
-					startMove(renderer, event.button.x, event.button.y);
-					
-					break;
-				}
-				break;
-			case SDL_MOUSEBUTTONUP:
-				if (event.button.button == SDL_BUTTON_LEFT) {
-
-					makeMove(renderer, event.button.x,event.button.y);
+		if (chessStarted) {
+			initChessGame(renderer);
+		}
+		while(chessStarted){
+			while (SDL_PollEvent(&event)) {
+				switch (event.type) {
+				case SDL_QUIT:
+					gameRunning = false;
 
 					break;
-			case SDL_MOUSEMOTION:
+				case SDL_WINDOWEVENT:
+					if (event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) {
+						//Chess thing lol /*
+						Board::drawBoard(renderer, event.window.data1, event.window.data2);
+						Board::pieceDisplay(renderer);
+						SDL_RenderPresent(renderer);
 
-				dragPiece(renderer, event.motion.x, event.motion.y);
+						//make a function that displays the current board shape. make a fen notation val called "current", 
+						//and every time it resizes it redraws from looking at it
+					}
 
-				break;
+					break;
+				case SDL_MOUSEBUTTONDOWN:
+					switch (event.button.button) {
+
+					case SDL_BUTTON_LEFT:
+
+						//select piece // start move
+						startMove(renderer, event.button.x, event.button.y);
+
+						break;
+					}
+					break;
+				case SDL_MOUSEBUTTONUP:
+					if (event.button.button == SDL_BUTTON_LEFT) {
+
+						makeMove(renderer, event.button.x, event.button.y);
+
+						break;
+				case SDL_MOUSEMOTION:
+
+					dragPiece(renderer, event.motion.x, event.motion.y);
+
+					break;
+					}
 				}
-
 			}
-			//Uint64 end = SDL_GetPerformanceCounter();
-
-			//float elapsedMS = (end - start) / (float)SDL_GetPerformanceFrequency() * 1000.0f;
-
-			// Cap to 60 FPS
-			//SDL_Delay(10);
 		}
-		if (checkmate) {
-			if (playerTurn == 'w') {
-				SDL_RenderCopy(renderer, whiteCheckMateTexture, NULL, &statusTile);
-			}
-			else {
-				SDL_RenderCopy(renderer, blackCheckMateTexture, NULL, &statusTile);
-			}
-			SDL_RenderPresent(renderer);
-			SDL_Delay(3000);
-		}
-		//while (checkmate) {
-			
-		//}
-
 	}
 	Mix_FreeChunk(dieA);
 	Mix_FreeChunk(moveA);
@@ -210,3 +222,5 @@ int main(int argc, char* argv[])
 	SDL_Quit();
 	return 0;
 }
+
+

@@ -86,10 +86,6 @@ bool Pawn::isPathClear(int newRow)
 void Pawn::getAttackTiles(){
 	clearAttackTiles();
 
-	for (int i = 0; i < maxAttackTiles; i++) {
-		attackZone[i] = new SDL_Rect();
-	}
-
 	if (this->pieceType & WHITE) {
 		if (this->pieceRow > 0 and this->pieceColumn > 0) {
 			attackZone[numAttackTiles++] = &boardTiles[this->pieceRow - 1][this->pieceColumn - 1];

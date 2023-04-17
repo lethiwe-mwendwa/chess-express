@@ -36,6 +36,7 @@ const int boardSize=8;
 
 extern const char titleImagePath[];
 extern const char pressEnterImagePath[];
+extern const char menuImagePath[];
 
 extern const char* chessExpressASCII;
 extern const char* lethiweMwendwaASCII;
@@ -48,7 +49,9 @@ extern bool check;
 
 extern bool checkmate;
 
-extern bool isKingSelected;
+extern bool menu;
+
+extern bool chessStarted;
 
 extern King* whiteKing;
 
@@ -90,6 +93,12 @@ extern SDL_Texture* whiteCheckTexture;
 
 extern SDL_Texture* blackCheckMateTexture;
 extern SDL_Texture* whiteCheckMateTexture;
+
+const int MAX_PIECES = 16;
+extern int numOfWhitePieces;
+extern int numOfBlackPieces;
+extern Piece* whitePieces[MAX_PIECES];
+extern Piece* blackPieces[MAX_PIECES];
 
 
 //BLACK, WHITE.

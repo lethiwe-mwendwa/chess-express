@@ -72,8 +72,9 @@ Piece* piecesOnBoard[boardSize][boardSize];
 
 bool check = false;
 bool checkmate = false;
+bool menu = false;
+bool chessStarted = false;
 
-bool isKingSelected = false;
 
 King* whiteKing = new King(NULL, NULL, NULL, NULL);
 
@@ -85,10 +86,11 @@ SDL_Texture* numTextures[boardSize];
 
 const char titleImagePath[] = "assets/ChessXpress.bmp";
 const char pressEnterImagePath[] = "assets/pressEnter.bmp";
+const char menuImagePath[] = "assets/instructions.bmp";
 
 const char startingFen[] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-char currentFen[] = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+char currentFen[] = "rnbqk1nr/1ppp1ppp/p7/2b1p3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 0 1";
 
 char piecePlacement[64] = { 0 };
 char playerTurn = '-';
@@ -103,6 +105,11 @@ Mix_Chunk* introA;
 Mix_Chunk* startA;
 Mix_Chunk* checkA;
 Mix_Chunk* endGameA;
+
+int numOfWhitePieces;
+int numOfBlackPieces;
+Piece* whitePieces[MAX_PIECES];
+Piece* blackPieces[MAX_PIECES];
 
 const char* chessExpressASCII = R"(                                                                          
                                                                            

@@ -27,7 +27,9 @@ Piece::Piece(SDL_Renderer* renderer,int type, int row, int column) {
 	this->pieceTexture = SDL_CreateTextureFromSurface(renderer, pieceSurface);
 	SDL_FreeSurface(pieceSurface);
 	
-	//drawPeice(renderer, row, column);
+	for (int i = 0; i < maxAttackTiles; i++) {
+		attackZone[i] = new SDL_Rect();
+	}
 	
 };
 
@@ -68,16 +70,20 @@ void Piece::killPiece()
 	this->pieceAlive = false;
 	piecesOnBoard[this->pieceRow][this->pieceColumn] = NULL;
 	SDL_DestroyTexture(this->pieceTexture);
+
+	if (playerTurn == 'w'){
+		numOfBlackPieces = numOfBlackPieces - 1;
+	} 
+	else{
+		numOfWhitePieces = numOfWhitePieces - 1;
+	}
+
 	delete this;
 }
 
 void Piece::getAttackTiles()
 {
 	this->clearAttackTiles();
-
-	for (int i = 0; i < maxAttackTiles; i++) {
-		this->attackZone[i] = new SDL_Rect();
-	}
 
 	for (int i = 0; i < boardSize; i++) {
 		for (int j = 0; j < boardSize; j++) {
@@ -98,28 +104,6 @@ bool Piece::inAttackZone(int column, int row)
 	}
 	return false;
 }
-
-/*
-void Piece::drawPeice(SDL_Renderer* renderer, int row, int column) {
-	//SDL_Surface* imageSurface = NULL;
-
-	//imageSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
-	//imageSurface = SDL_LoadBMP(getPiecePath(this->pieceType));
-
-	//if (NULL == imageSurface) {
-	//	cout << "SDL error bozo" << SDL_GetError();
-	//}
-	//SDL_Rect imageRectLocation = boardTiles[row][column];
-
-	//SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(renderer, imageSurface);
-	//SDL_FreeSurface(imageSurface);
-
-	//SDL_RenderCopy(renderer, this->pieceTexture, NULL, &imageRectLocation);
-	//SDL_DestroyTexture(imageTexture);
-
-
-};
-*/
 
 void Piece::drawPiece(SDL_Renderer* renderer, SDL_Rect imageRectLocation) {
 	SDL_RenderCopy(renderer, this->pieceTexture, NULL, &imageRectLocation);
@@ -162,6 +146,7 @@ void Piece::clearAttackTiles() {
 	for (int i = 0; i < numAttackTiles && i < maxAttackTiles; i++) {
 		//delete attackZone[i];
 		this->attackZone[i] = nullptr;
+
 	}
 	this->numAttackTiles = 0;
 }

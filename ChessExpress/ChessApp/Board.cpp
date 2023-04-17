@@ -247,6 +247,12 @@ void Board::chessLetterDisplay(SDL_Renderer* renderer, int column){
 
 void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 {
+	numOfWhitePieces= 0;
+	numOfBlackPieces= 0;
+	for (int i = 0; i < MAX_PIECES; i++) {
+		whitePieces[i] = NULL;
+		blackPieces[i] = NULL;
+	}
 
 	// For the first part of the 
 	int currentRow = 0;
@@ -267,9 +273,9 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 			switch (fen[i]) {
 			case('r'):
 			{
-
 				piecesOnBoard[currentRow][currentColumn] = new Rook(renderer, BLACK | ROOK, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				numOfBlackPieces++;
 
 			}
 				break;
@@ -278,6 +284,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Knight(renderer, BLACK | KNIGHT, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				numOfBlackPieces++;
 			}
 				break;
 			case('b'):
@@ -285,12 +292,14 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 			{	
 				piecesOnBoard[currentRow][currentColumn] = new Bishop(renderer, BLACK + BISHOP, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				numOfBlackPieces++;
 			}
 				break;
 			case('q'):
 			{				
 				piecesOnBoard[currentRow][currentColumn] = new Queen(renderer, BLACK + QUEEN, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				numOfBlackPieces++;
 			}
 				break;
 			case('k'): 
@@ -298,7 +307,7 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				piecesOnBoard[currentRow][currentColumn] = new King(renderer, BLACK + KING, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 				blackKing = dynamic_cast<King*>(piecesOnBoard[currentRow][currentColumn]);
-				
+				numOfBlackPieces++;
 
 			}
 				break;
@@ -306,30 +315,35 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Pawn(renderer, BLACK + PAWN, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				numOfWhitePieces++;
 			}
 				break;
 			case('R'):
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Rook(renderer, WHITE + ROOK, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				numOfWhitePieces++;
 			}
 				break;
 			case('N'):
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Knight(renderer, WHITE + KNIGHT, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				numOfWhitePieces++;
 			}
 				break;
 			case('B'):
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Bishop(renderer, WHITE + BISHOP, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				numOfWhitePieces++;
 			}
 				break;
 			case('Q'):
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Queen(renderer, WHITE + QUEEN, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				numOfWhitePieces++;
 			}
 				break;
 			case('K'):
@@ -337,12 +351,14 @@ void Board::fenSetup(SDL_Renderer* renderer, char fen[])
 				piecesOnBoard[currentRow][currentColumn] = new King(renderer, WHITE + KING, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
 				whiteKing = dynamic_cast<King*>( piecesOnBoard[currentRow][currentColumn]);
+				numOfWhitePieces++;
 			}
 				break;
 			case('P'):
 			{
 				piecesOnBoard[currentRow][currentColumn] = new Pawn(renderer, WHITE + PAWN, currentRow, currentColumn);
 				piecesOnBoard[currentRow][currentColumn]->getAttackTiles();
+				numOfWhitePieces++;
 			}
 				break;
 			}
@@ -399,39 +415,43 @@ void Board::toFen(){
 	}
 }
 
-bool Board::noPiecesCanUncheck(){
-	int turn;
-	if (playerTurn == 'w') {
-		turn = WHITE;
+bool Board::noPiecesCanUncheck() {
+	int turn = (playerTurn == 'w') ? WHITE : BLACK;
+	int num;
+	Piece** pieces;
+
+	if (turn == WHITE) {
+		pieces = whitePieces;
+		num = numOfWhitePieces;
 	}
 	else {
-		turn = BLACK;
+		pieces = blackPieces;
+		num = numOfBlackPieces;
 	}
-	for (int i = 0; i < boardSize; i++) {
+
+	for (int i = 0; i < num; i++) {
+		Piece* currentPiece = pieces[i];
+
 		for (int j = 0; j < boardSize; j++) {
+			for (int k = 0; k < boardSize; k++) {
+				Piece* pieceInTheWay = piecesOnBoard[j][k];
 
-			//for every piece, check every spot
-			if (piecesOnBoard[i][j]) {
-
-				for (int k = 0; k < boardSize; k++) {
-					for (int l = 0; l < boardSize; l++) {
-						if ((piecesOnBoard[i][j]->pieceType & COLOUR_MASK) == turn and
-							piecesOnBoard[i][j]->moveUnchecks(k, l)) {
-							return false;
-						}
-
+				if (pieceInTheWay and currentPiece) {
+					if (currentPiece->moveUnchecks(j, k, pieceInTheWay)) {
+						return false;
 					}
 				}
-
+				else if (currentPiece and (currentPiece->moveUnchecks(j, k))) {
+					return false;
+				}
 			}
-
-
-	
 		}
 	}
-	
-	return true;
 
+	return true;
 }
+
+
+
 
 //bool Board::castleAbility()

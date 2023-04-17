@@ -4,6 +4,86 @@
 #include "Board.h"
 using namespace std;
 
+SDL_Rect getRectFromImage(int sWidth, int sHeight, SDL_Surface* imageSurface, float widthMult, float heightMult) {
+	int imageWidth = imageSurface->w;
+	int imageHeight = imageSurface->h;
+	SDL_Rect rect{};
+
+	if (sHeight > sWidth) {
+		rect.w = sWidth * heightMult;
+		rect.h = (rect.w * imageHeight) / imageWidth;
+	}
+	else {
+		rect.h = sHeight * widthMult;
+		rect.w = (rect.h * imageWidth) / imageHeight;
+	}
+
+	rect.x = (sWidth - rect.w) / 2;
+	rect.y = (sHeight - rect.h) / 2;
+
+	return rect;
+}
+
+
+void initChessGame(SDL_Renderer* renderer) {
+	cout << lethiweMwendwaASCII << endl;
+	cout << "Librarys used:" << endl << "SDL2, SDL2_Mixer" << endl << endl;
+
+	//Create the board. (Make function to create the board and render pieces in default mode once FEN notation is done.
+	int startChannel = Mix_PlayChannel(-1, startA, 0);
+	if (startChannel == -1) {
+		printf("Failed to play die sound: %s\n", Mix_GetError());
+	}
+
+	Board::initBoardTextures(renderer);
+	Board::fenSplitter(currentFen);
+	Board::fenSetup(renderer, piecePlacement);
+	Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+	Board::pieceDisplay(renderer);
+	setCheckValue(renderer);
+	SDL_RenderPresent(renderer);
+	SDL_Delay(1000);
+	Board::drawBoard(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+	Board::pieceDisplay(renderer);
+	SDL_RenderPresent(renderer);
+
+	//SDL_UpdateWindowSurface(window);  (Dont remember what this was about. Read up on what this does)
+
+	//Temporary testing:
+	//test code
+
+	cout << piecePlacement << endl;
+	cout << playerTurn << endl;
+	cout << castlingAbility << endl;
+	cout << enPassantTarget << endl;
+	cout << halfmoveClock << endl;
+	cout << fullmoveClock << endl << endl;
+}
+
+void menuSequence(SDL_Renderer* renderer, int sWidth, int sHeight) {
+	SCREEN_WIDTH = sWidth;
+	SCREEN_HEIGHT = sHeight;
+
+	SDL_SetRenderDrawColor(renderer, 5, 50, 70, 255);
+	SDL_RenderClear(renderer);
+
+	SDL_Surface* imageSurface = NULL;
+	imageSurface = SDL_LoadBMP(menuImagePath);
+	if (NULL == imageSurface) {
+		cout << "SDL error" << SDL_GetError();
+	}
+
+	SDL_Texture * imageTexture = SDL_CreateTextureFromSurface(renderer, imageSurface);
+	SDL_FreeSurface(imageSurface);
+
+	SDL_Rect menuRect = getRectFromImage(SCREEN_WIDTH, SCREEN_HEIGHT, imageSurface, 0.8, 0.8);
+
+	SDL_RenderCopy(renderer, imageTexture, NULL, &menuRect);
+	SDL_DestroyTexture(imageTexture);
+	SDL_RenderPresent(renderer);
+	
+};
+
 void titleSequence(SDL_Renderer* renderer, int sWidth, int sHeight) {
 
 	SDL_SetRenderDrawColor(renderer, 5, 50, 70, 255);
@@ -160,6 +240,9 @@ void makeMove(SDL_Renderer* renderer, int x, int y) {
 					if (checkmateChannel == -1) {
 						printf("Failed to play move sound: %s\n", Mix_GetError());
 					}
+					SDL_RenderPresent(renderer);
+					chessStarted = false;
+					return;
 				}
 				else if (check) {
 					int checkChannel = Mix_PlayChannel(-1, checkA, 0);
@@ -218,11 +301,14 @@ void dragPiece(SDL_Renderer* renderer, int x, int y) {
 }
 
 void setCheckValue(SDL_Renderer* renderer) {
+
 	Board::refreshAllAttackZones();
+
 	if (playerTurn == 'w') {
 		if (whiteKing->inDanger(whiteKing->pieceColumn, whiteKing->pieceRow)) {
 			if (whiteKing->trapped()) {
 				checkmate = true;
+				SDL_RenderCopy(renderer, whiteCheckMateTexture, NULL, &statusTile);
 			}
 			else{
 				SDL_RenderCopy(renderer, whiteCheckTexture, NULL, &statusTile);
@@ -241,7 +327,7 @@ void setCheckValue(SDL_Renderer* renderer) {
 
 			if (blackKing->trapped()) {
 				checkmate = true;
-				
+				SDL_RenderCopy(renderer, blackCheckMateTexture, NULL, &statusTile);
 			}
 			else {
 				SDL_RenderCopy(renderer, blackCheckTexture, NULL, &statusTile);
@@ -256,3 +342,5 @@ void setCheckValue(SDL_Renderer* renderer) {
 		}
 	}
 }
+
+
