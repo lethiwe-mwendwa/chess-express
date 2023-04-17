@@ -14,6 +14,8 @@ public:
 
 	static void toFen();
 
+	static bool noPiecesCanUncheck();
+
 	static void pieceDisplay(SDL_Renderer* renderer, Piece* selectedPiece = NULL);
 
 	static void initBoardTextures(SDL_Renderer* renderer);

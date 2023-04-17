@@ -1,5 +1,6 @@
 #include "King.h"
 #include "Constants.h"
+#include "Board.h"
 
 bool King::isMoveValid(int newColumn, int newRow)
 {
@@ -54,11 +55,23 @@ bool King::inDanger(int column, int row) {
 
 bool King::trapped()
 {
-	for (int i = 0; i < maxAttackTiles; i++) {
-		for (int j = 0; j < maxAttackTiles; j++) {
-			if (this->isMoveValid(j, i) and not this->inDanger(j,i)){
-				return false;
+	if (not Board::noPiecesCanUncheck()) {
+		return false;
+	}
+
+	for (int i = 0; i < boardSize; i++) {
+		for (int j = 0; j < boardSize; j++) {
+			if (piecesOnBoard[i][j]) {
+				if (this->isKillValid(j, i) and not this->inDanger(j, i)) {
+					return false;
+				}
 			}
+			else {
+				if (this->isMoveValid(j, i) and not this->inDanger(j, i)) {
+					return false;
+				}
+			}
+			
 		}
 	}
 	return true;

@@ -5,6 +5,8 @@
 #include <iostream>
 #include "Inputs.h"
 #include "Board.h"
+#include "Game.h"
+
 using namespace std;
 
 Piece::Piece(SDL_Renderer* renderer,int type, int row, int column) {
@@ -61,7 +63,7 @@ const char* Piece::getPiecePath(int pieceType) {
 	return(pieceImagePaths[typeIndex][colourIndex]);
 };
 
-void Piece::killPeice()
+void Piece::killPiece()
 {
 	this->pieceAlive = false;
 	piecesOnBoard[this->pieceRow][this->pieceColumn] = NULL;
@@ -119,8 +121,7 @@ void Piece::drawPeice(SDL_Renderer* renderer, int row, int column) {
 };
 */
 
-void Piece::drawPeice(SDL_Renderer* renderer, SDL_Rect imageRectLocation) {
-
+void Piece::drawPiece(SDL_Renderer* renderer, SDL_Rect imageRectLocation) {
 	SDL_RenderCopy(renderer, this->pieceTexture, NULL, &imageRectLocation);
 
 };
@@ -130,11 +131,11 @@ void Piece::getPieceTrans(int newColumn, int newRow, int &transColumn, int &tran
 	transRow = this->pieceRow - newRow;
 }
 
-void Piece::placePiece(SDL_Renderer* renderer, int x, int y) {
+void Piece::placePiece(int x, int y) {
 
 	clickedPiece = this;
 
-	SDL_Rect newLocation = *(findClickedRect(x, y));
+	SDL_Rect* newLocation = findClickedRect(x, y);
 
 	int oldRow = clickedPiece->pieceRow;
 	int oldColumn = clickedPiece->pieceColumn;
@@ -152,8 +153,7 @@ void Piece::placePiece(SDL_Renderer* renderer, int x, int y) {
 	piecesOnBoard[newRow][newColumn] = clickedPiece;
 	piecesOnBoard[oldRow][oldColumn] = NULL;
 
-
-	clickedPiece->drawPeice(renderer, newLocation);
+	this->pieceRect = newLocation;
 	
 
 };
@@ -164,6 +164,41 @@ void Piece::clearAttackTiles() {
 		this->attackZone[i] = nullptr;
 	}
 	this->numAttackTiles = 0;
+}
+
+bool Piece::moveUnchecks(int newColumn, int newRow, Piece* pieceInTheWay){
+
+	bool checkTemp = check;
+	SDL_Renderer* nullRenderer = NULL;
+	Piece* pieceTemp = pieceInTheWay;
+
+	//simulate the move
+	int oldRow = this->pieceRow;
+	int oldColumn = this->pieceColumn;
+
+	piecesOnBoard[newRow][newColumn] = this;
+	piecesOnBoard[oldRow][oldColumn] = NULL;
+	setCheckValue(nullRenderer);
+	
+	// undo move
+	piecesOnBoard[oldRow][oldColumn] = this;
+	if (pieceInTheWay) {
+		piecesOnBoard[oldRow][oldColumn] = pieceTemp;
+	}
+	piecesOnBoard[newRow][newColumn] = NULL;
+	Board::refreshAllAttackZones();
+	
+	//check if move unchecks king
+	if (check) {
+		check = checkTemp;
+		return false;
+	}
+	else {
+		check = checkTemp;
+		return true;
+	}
+	
+
 }
 
 char Piece::toFEN() {

@@ -177,7 +177,7 @@ void Board::pieceDisplay(SDL_Renderer* renderer, Piece* selectedPiece)
 	for (int i = 0; i < boardSize; i++) {
 		for (int j = 0; j < boardSize; j++) {
 			if (piecesOnBoard[i][j] && (selectedPiece != piecesOnBoard[i][j])) {
-				piecesOnBoard[i][j]->drawPeice(renderer, boardTiles[i][j]);
+				piecesOnBoard[i][j]->drawPiece(renderer, boardTiles[i][j]);
 				
 			}
 		}
@@ -397,6 +397,41 @@ void Board::toFen(){
 			piecePlacement[charCount++] += '/';
 		}
 	}
+}
+
+bool Board::noPiecesCanUncheck(){
+	int turn;
+	if (playerTurn == 'w') {
+		turn = WHITE;
+	}
+	else {
+		turn = BLACK;
+	}
+	for (int i = 0; i < boardSize; i++) {
+		for (int j = 0; j < boardSize; j++) {
+
+			//for every piece, check every spot
+			if (piecesOnBoard[i][j]) {
+
+				for (int k = 0; k < boardSize; k++) {
+					for (int l = 0; l < boardSize; l++) {
+						if ((piecesOnBoard[i][j]->pieceType & COLOUR_MASK) == turn and
+							piecesOnBoard[i][j]->moveUnchecks(k, l)) {
+							return false;
+						}
+
+					}
+				}
+
+			}
+
+
+	
+		}
+	}
+	
+	return true;
+
 }
 
 //bool Board::castleAbility()

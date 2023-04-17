@@ -15,19 +15,21 @@ public:
 	SDL_Surface* pieceSurface;
 	SDL_Texture* pieceTexture;
 
-	void killPeice();
+	void killPiece();
 	
 	//void drawPeice(SDL_Renderer* renderer, int row, int column);
-	void drawPeice(SDL_Renderer* renderer, SDL_Rect imageRectLocation);
+	void drawPiece(SDL_Renderer* renderer, SDL_Rect imageRectLocation);
 	
 	void getPieceTrans(int newColumn, int newRow, int& transColumn, int& transRow);
 
-	void placePiece(SDL_Renderer* renderer, int x, int y);
+	void placePiece(int x, int y);
 
 	static const char* getPiecePath(int pieceType);
 
 	virtual bool isMoveValid(int newColumn, int newRow) = 0;
 	virtual bool isKillValid(int newColumn, int newRow) = 0;
+
+	bool moveUnchecks(int newColumn, int newRow, Piece* pieceInTheWay = NULL);
 
 	virtual void getAttackTiles();
 	bool inAttackZone(int column, int row);

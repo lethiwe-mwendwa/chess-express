@@ -40,8 +40,6 @@ extern const char pressEnterImagePath[];
 extern const char* chessExpressASCII;
 extern const char* lethiweMwendwaASCII;
 
-
-
 extern SDL_Rect boardTiles[boardSize][boardSize];
 
 extern Piece* piecesOnBoard[boardSize][boardSize];
